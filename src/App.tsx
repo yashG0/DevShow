@@ -4,14 +4,8 @@ import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { AppLayout } from "./layouts/AppLayout";
 import { Dashboard } from "./pages/Dashboard";
 import { Home } from "./pages/Home";
-
-function LoginPlaceholder() {
-  return <div>Login</div>;
-}
-
-function RegisterPlaceholder() {
-  return <div>Register</div>;
-}
+import { Login } from "./pages/Login";
+import { Register } from "./pages/Register";
 
 function App() {
   return (
@@ -20,9 +14,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
 
-          <Route path="/login" element={<LoginPlaceholder />} />
+          <Route path="/login" element={<Login />} />
 
-          <Route path="/register" element={<RegisterPlaceholder />} />
+          <Route path="/register" element={<Register />} />
 
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
