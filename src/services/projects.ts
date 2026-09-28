@@ -14,6 +14,7 @@ export type Project = {
   view_count: number;
   created_at: string;
   updated_at: string;
+  media: ProjectMedia[];
 };
 
 export async function getProjects() {
