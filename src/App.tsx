@@ -9,6 +9,7 @@ import { Register } from "./pages/Register";
 import { Profile } from "./pages/Profile";
 import { ProjectCreate } from "./pages/ProjectCreate";
 import { ProjectDetail } from "./pages/ProjectDetail";
+import { ProjectEdit } from "./pages/ProjectEdit";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/projects/new" element={<ProjectCreate />} />
             <Route path="/projects/:projectId" element={<ProjectDetail />} />
+            <Route path="/projects/:projectId/edit" element={<ProjectEdit />} />
           </Route>
         </Routes>
       </AppLayout>

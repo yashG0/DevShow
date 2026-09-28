@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { toggleProjectPublish } from "../services/projects";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   ArrowLeft,
   ExternalLink,
@@ -23,6 +24,7 @@ export function ProjectDetail() {
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [publishing, setPublishing] = useState(false);
 
   useEffect(() => {
     async function loadProject() {
@@ -41,6 +43,22 @@ export function ProjectDetail() {
 
     loadProject();
   }, [projectId]);
+
+  async function handlePublishToggle() {
+    if (!project) return;
+
+    try {
+      setPublishing(true);
+      setError("");
+
+      const updatedProject = await toggleProjectPublish(project.id);
+      setProject(updatedProject);
+    } catch (error) {
+      setError(getApiErrorMessage(error, "Failed to update project status."));
+    } finally {
+      setPublishing(false);
+    }
+  }
 
   async function deleteProject() {
     if (!project) return;
@@ -140,6 +158,15 @@ export function ProjectDetail() {
             <Button
               variant="secondary"
               size="sm"
+              onClick={handlePublishToggle}
+              loading={publishing}
+            >
+              {project.is_published ? "Unpublish" : "Publish"}
+            </Button>
+
+            <Button
+              variant="secondary"
+              size="sm"
               onClick={() => navigate(`/projects/${project.id}/edit`)}
             >
               <Pencil size={15} />
@@ -220,7 +247,7 @@ function ProjectLink({
 }: {
   label: string;
   href: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
 }) {
   return (
     <a

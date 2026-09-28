@@ -20,3 +20,11 @@ export async function getProjects() {
   const response = await api.get<Project[]>("/api/projects");
   return response.data;
 }
+
+export async function toggleProjectPublish(projectId: number) {
+  const response = await api.patch<Project>(
+    `/api/projects/${projectId}/publish`,
+  );
+
+  return response.data;
+}
