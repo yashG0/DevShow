@@ -11,6 +11,7 @@ import { ProjectCreate } from "./pages/ProjectCreate";
 import { ProjectDetail } from "./pages/ProjectDetail";
 import { ProjectEdit } from "./pages/ProjectEdit";
 import { PublicProfile } from "./pages/PublicProfile";
+import { PublicProject } from "./pages/PublicProject";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/login" element={<Login />} />
 
           <Route path="/register" element={<Register />} />
+          <Route path="/dev/:username/:slug" element={<PublicProject />} />
           <Route path="/dev/:username" element={<PublicProfile />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
