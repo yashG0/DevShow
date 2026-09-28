@@ -1,28 +1,17 @@
-import {
-  ChevronDown,
-  Code2,
-  FolderGit2,
-  Home,
-  LogOut,
-  UserRound,
-} from "lucide-react"
-import {
-  Link,
-  NavLink,
-  useNavigate,
-} from "react-router-dom"
+import { ChevronDown, Code2, FolderGit2, Home, LogOut } from "lucide-react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
-import { useAuth } from "../auth/AuthProvider"
-import { ThemeSwitcher } from "./ThemeSwitcher"
-import { Button } from "./ui/Button"
+import { useAuth } from "../auth/AuthProvider";
+import { ThemeSwitcher } from "./ThemeSwitcher";
+import { Button } from "./ui/Button";
 
 export function Navbar() {
-  const { user, logout } = useAuth()
-  const navigate = useNavigate()
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   function handleLogout() {
-    logout()
-    navigate("/", { replace: true })
+    logout();
+    navigate("/", { replace: true });
   }
 
   return (
@@ -30,10 +19,7 @@ export function Navbar() {
       <div className="mx-auto flex h-16 max-w-7xl items-center px-5 sm:px-6">
         {/* Brand */}
 
-        <Link
-          to="/"
-          className="group flex items-center gap-2.5"
-        >
+        <Link to="/" className="group flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] text-[var(--accent)] transition-colors group-hover:border-[var(--accent)]/40">
             <Code2 size={17} strokeWidth={2.2} />
           </div>
@@ -46,29 +32,14 @@ export function Navbar() {
         {/* Navigation */}
 
         <nav className="ml-8 hidden items-center gap-1 md:flex">
-          <NavItem
-            to="/"
-            icon={<Home size={15} />}
-          >
+          <NavItem to="/" icon={<Home size={15} />}>
             Home
           </NavItem>
 
           {user && (
-            <>
-              <NavItem
-                to="/dashboard"
-                icon={<FolderGit2 size={15} />}
-              >
-                Projects
-              </NavItem>
-
-              <NavItem
-                to="/profile"
-                icon={<UserRound size={15} />}
-              >
-                Profile
-              </NavItem>
-            </>
+            <NavItem to="/dashboard" icon={<FolderGit2 size={15} />}>
+              Projects
+            </NavItem>
           )}
         </nav>
 
@@ -79,7 +50,7 @@ export function Navbar() {
             <>
               <div className="hidden h-5 w-px bg-[var(--border)] sm:block" />
 
-              {/* User */}
+              {/* User / Profile */}
 
               <button
                 type="button"
@@ -87,9 +58,7 @@ export function Navbar() {
                 className="group hidden items-center gap-2 rounded-[var(--radius-md)] px-2 py-1.5 transition-colors hover:bg-[var(--surface-hover)] sm:flex"
               >
                 <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[var(--accent)] text-[11px] font-semibold text-[var(--accent-foreground)]">
-                  {user.display_name
-                    ?.charAt(0)
-                    .toUpperCase()}
+                  {user.display_name?.charAt(0).toUpperCase()}
                 </div>
 
                 <div className="max-w-28 text-left">
@@ -102,10 +71,7 @@ export function Navbar() {
                   </p>
                 </div>
 
-                <ChevronDown
-                  size={14}
-                  className="text-[var(--text-muted)]"
-                />
+                <ChevronDown size={14} className="text-[var(--text-muted)]" />
               </button>
 
               <Button
@@ -127,10 +93,7 @@ export function Navbar() {
                 Log in
               </NavLink>
 
-              <Button
-                size="sm"
-                onClick={() => navigate("/register")}
-              >
+              <Button size="sm" onClick={() => navigate("/register")}>
                 Get started
               </Button>
             </>
@@ -140,7 +103,7 @@ export function Navbar() {
         </div>
       </div>
     </header>
-  )
+  );
 }
 
 function NavItem({
@@ -148,9 +111,9 @@ function NavItem({
   icon,
   children,
 }: {
-  to: string
-  icon: React.ReactNode
-  children: React.ReactNode
+  to: string;
+  icon: React.ReactNode;
+  children: React.ReactNode;
 }) {
   return (
     <NavLink
@@ -167,5 +130,5 @@ function NavItem({
       {icon}
       {children}
     </NavLink>
-  )
+  );
 }
