@@ -10,7 +10,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 
 import { Spinner } from "../components/ui/Spinner";
-import { api } from "../services/api";
+import { api, getMediaUrl } from "../services/api";
 import { getApiErrorMessage } from "../services/errors";
 
 type PublicMedia = {
@@ -180,7 +180,7 @@ export function PublicProject() {
                   className="overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)]"
                 >
                   <img
-                    src={`http://localhost:8000/${media.path}`}
+                    src={getMediaUrl(media.path)}
                     alt={media.alt ?? project.title}
                     className="w-full object-cover"
                   />

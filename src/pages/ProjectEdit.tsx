@@ -12,7 +12,7 @@ import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
 import { Spinner } from "../components/ui/Spinner";
 import { Textarea } from "../components/ui/Textarea";
-import { api } from "../services/api";
+import { api, getMediaUrl } from "../services/api";
 import { getApiErrorMessage } from "../services/errors";
 import {
   deleteProjectMedia,
@@ -48,9 +48,7 @@ export function ProjectEdit() {
         setLoading(true);
         setError("");
 
-        const response = await api.get<Project>(
-          `/api/projects/${projectId}`,
-        );
+        const response = await api.get<Project>(`/api/projects/${projectId}`);
 
         const data = response.data;
 
@@ -63,9 +61,7 @@ export function ProjectEdit() {
         setTech(data.tech);
         setMedia(data.media ?? []);
       } catch (error) {
-        setError(
-          getApiErrorMessage(error, "Unable to load this project."),
-        );
+        setError(getApiErrorMessage(error, "Unable to load this project."));
       } finally {
         setLoading(false);
       }
@@ -85,9 +81,7 @@ export function ProjectEdit() {
     setTechInput("");
   }
 
-  function handleTechKeyDown(
-    event: KeyboardEvent<HTMLInputElement>,
-  ) {
+  function handleTechKeyDown(event: KeyboardEvent<HTMLInputElement>) {
     if (event.key === "Enter" || event.key === ",") {
       event.preventDefault();
       addTech();
@@ -95,14 +89,10 @@ export function ProjectEdit() {
   }
 
   function removeTech(value: string) {
-    setTech((current) =>
-      current.filter((item) => item !== value),
-    );
+    setTech((current) => current.filter((item) => item !== value));
   }
 
-  async function handleUpload(
-    event: ChangeEvent<HTMLInputElement>,
-  ) {
+  async function handleUpload(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
 
     if (!file || !project) {
@@ -113,19 +103,11 @@ export function ProjectEdit() {
       setUploading(true);
       setError("");
 
-      const uploaded = await uploadProjectMedia(
-        project.id,
-        file,
-      );
+      const uploaded = await uploadProjectMedia(project.id, file);
 
       setMedia((current) => [...current, uploaded]);
     } catch (error) {
-      setError(
-        getApiErrorMessage(
-          error,
-          "Unable to upload screenshot.",
-        ),
-      );
+      setError(getApiErrorMessage(error, "Unable to upload screenshot."));
     } finally {
       setUploading(false);
       event.target.value = "";
@@ -140,27 +122,15 @@ export function ProjectEdit() {
     try {
       setError("");
 
-      await deleteProjectMedia(
-        project.id,
-        mediaId,
-      );
+      await deleteProjectMedia(project.id, mediaId);
 
-      setMedia((current) =>
-        current.filter((item) => item.id !== mediaId),
-      );
+      setMedia((current) => current.filter((item) => item.id !== mediaId));
     } catch (error) {
-      setError(
-        getApiErrorMessage(
-          error,
-          "Unable to remove screenshot.",
-        ),
-      );
+      setError(getApiErrorMessage(error, "Unable to remove screenshot."));
     }
   }
 
-  async function handleSubmit(
-    event: FormEvent<HTMLFormElement>,
-  ) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     setError("");
@@ -184,27 +154,19 @@ export function ProjectEdit() {
     try {
       setSaving(true);
 
-      const response = await api.patch<Project>(
-        `/api/projects/${projectId}`,
-        {
-          title: title.trim(),
-          tagline: tagline.trim(),
-          description_md: description.trim(),
-          tech,
-          github_url: githubUrl.trim() || null,
-          demo_url: demoUrl.trim() || null,
-        },
-      );
+      const response = await api.patch<Project>(`/api/projects/${projectId}`, {
+        title: title.trim(),
+        tagline: tagline.trim(),
+        description_md: description.trim(),
+        tech,
+        github_url: githubUrl.trim() || null,
+        demo_url: demoUrl.trim() || null,
+      });
 
       setProject(response.data);
       setSaved(true);
     } catch (error) {
-      setError(
-        getApiErrorMessage(
-          error,
-          "Unable to save your project.",
-        ),
-      );
+      setError(getApiErrorMessage(error, "Unable to save your project."));
     } finally {
       setSaving(false);
     }
@@ -319,11 +281,7 @@ export function ProjectEdit() {
                 />
               </div>
 
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={addTech}
-              >
+              <Button type="button" variant="secondary" onClick={addTech}>
                 <Plus size={16} />
                 Add
               </Button>
@@ -437,7 +395,7 @@ export function ProjectEdit() {
               className="group relative overflow-hidden rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)]"
             >
               <img
-                src={`http://localhost:8000/${item.path}`}
+                src={getMediaUrl(item.path)}
                 alt={item.alt ?? ""}
                 className="aspect-video w-full object-cover"
               />
@@ -455,9 +413,7 @@ export function ProjectEdit() {
 
         {media.length < 5 && (
           <label className="mt-4 flex cursor-pointer items-center justify-center rounded-[var(--radius-md)] border border-dashed border-[var(--border)] px-5 py-8 text-sm text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-hover)]">
-            {uploading
-              ? "Uploading..."
-              : "Click to upload screenshot"}
+            {uploading ? "Uploading..." : "Click to upload screenshot"}
 
             <input
               type="file"
@@ -489,9 +445,7 @@ function SectionHeading({
       </span>
 
       <div>
-        <h2 className="text-lg font-semibold tracking-[-0.02em]">
-          {title}
-        </h2>
+        <h2 className="text-lg font-semibold tracking-[-0.02em]">{title}</h2>
 
         <p className="mt-1.5 text-sm leading-6 text-[var(--text-secondary)]">
           {description}

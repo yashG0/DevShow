@@ -1,10 +1,10 @@
 import axios from "axios";
 
+export const API_BASE_URL =
+  import.meta.env.VITE_API_URL ?? "http://localhost:8000";
+
 export const api = axios.create({
-  baseURL: "http://localhost:8000",
-  headers: {
-    "Content-Type": "application/json",
-  },
+  baseURL: API_BASE_URL,
 });
 
 api.interceptors.request.use((config) => {
@@ -16,3 +16,7 @@ api.interceptors.request.use((config) => {
 
   return config;
 });
+
+export function getMediaUrl(path: string) {
+  return `${API_BASE_URL}/${path}`;
+}
