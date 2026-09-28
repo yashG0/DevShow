@@ -45,16 +45,17 @@ type PublicProjectResponse = {
 export function PublicProject() {
   const { username, slug } = useParams();
   const navigate = useNavigate();
-
   const [data, setData] = useState<PublicProjectResponse | null>(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [selectedMediaIndex, setSelectedMediaIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadProject() {
       try {
         setLoading(true);
         setError("");
+        setSelectedMediaIndex(0);
 
         const response = await api.get<PublicProjectResponse>(
           `/api/public/dev/${username}/${slug}`,
@@ -99,6 +100,10 @@ export function PublicProject() {
   }
 
   const { project, developer } = data;
+  const sortedMedia = [...project.media].sort(
+    (a, b) => a.position - b.position,
+  );
+  const selectedMedia = sortedMedia[selectedMediaIndex];
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-10 lg:px-8 lg:py-14">
@@ -167,36 +172,49 @@ export function PublicProject() {
       </header>
 
       {/* Screenshots */}
-      {project.media.length > 0 && (
+      {sortedMedia.length > 0 && (
         <section className="pt-10">
-          <div className="space-y-5">
-            {/* Hero screenshot */}
-            <div className="overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)]">
+          {/* Main viewer */}
+          <div className="overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)]">
+            <div className="relative flex min-h-[420px] items-center justify-center bg-[var(--background)] p-3 sm:min-h-[520px] sm:p-5">
               <img
-                src={getMediaUrl(project.media[0].path)}
-                alt={project.media[0].alt ?? project.title}
-                className="w-full object-cover"
+                src={getMediaUrl(selectedMedia.path)}
+                alt={selectedMedia.alt ?? project.title}
+                className="max-h-[620px] w-full rounded-md object-contain"
               />
-            </div>
 
-            {/* Gallery */}
-            {project.media.length > 1 && (
-              <div className="grid gap-5 sm:grid-cols-2">
-                {project.media.slice(1).map((media) => (
-                  <div
-                    key={media.id}
-                    className="overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)]"
-                  >
-                    <img
-                      src={getMediaUrl(media.path)}
-                      alt={media.alt ?? project.title}
-                      className="aspect-video w-full object-cover"
-                    />
-                  </div>
-                ))}
+              <div className="absolute bottom-5 right-5 rounded-md border border-[var(--border)] bg-[var(--surface)]/90 px-2.5 py-1 font-mono text-xs text-[var(--text-muted)] backdrop-blur">
+                {selectedMediaIndex + 1} / {sortedMedia.length}
               </div>
-            )}
+            </div>
           </div>
+
+          {/* Thumbnail navigation */}
+          {sortedMedia.length > 1 && (
+            <div className="mt-4 flex gap-3 overflow-x-auto pb-2">
+              {sortedMedia.map((media, index) => (
+                <button
+                  key={media.id}
+                  type="button"
+                  onClick={() => setSelectedMediaIndex(index)}
+                  className={`group shrink-0 overflow-hidden rounded-lg border transition-all ${
+                    index === selectedMediaIndex
+                      ? "border-[var(--accent)] ring-2 ring-[var(--accent)]/20"
+                      : "border-[var(--border)] opacity-70 hover:opacity-100"
+                  }`}
+                  aria-label={`View screenshot ${index + 1}`}
+                >
+                  <img
+                    src={getMediaUrl(media.path)}
+                    alt={
+                      media.alt ?? `${project.title} screenshot ${index + 1}`
+                    }
+                    className="h-20 w-32 object-cover sm:h-24 sm:w-40"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
         </section>
       )}
 
