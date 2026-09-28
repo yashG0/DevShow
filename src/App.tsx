@@ -10,6 +10,7 @@ import { Profile } from "./pages/Profile";
 import { ProjectCreate } from "./pages/ProjectCreate";
 import { ProjectDetail } from "./pages/ProjectDetail";
 import { ProjectEdit } from "./pages/ProjectEdit";
+import { PublicProfile } from "./pages/PublicProfile";
 
 function App() {
   return (
@@ -21,7 +22,7 @@ function App() {
           <Route path="/login" element={<Login />} />
 
           <Route path="/register" element={<Register />} />
-
+          <Route path="/dev/:username" element={<PublicProfile />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />

@@ -28,3 +28,27 @@ export async function toggleProjectPublish(projectId: number) {
 
   return response.data;
 }
+
+export type ProjectMedia = {
+  id: number;
+  project_id: number;
+  path: string;
+  alt: string | null;
+  position: number;
+};
+
+export async function uploadProjectMedia(projectId: number, file: File) {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await api.post<ProjectMedia>(
+    `/api/projects/${projectId}/media`,
+    formData,
+  );
+
+  return response.data;
+}
+
+export async function deleteProjectMedia(projectId: number, mediaId: number) {
+  await api.delete(`/api/projects/${projectId}/media/${mediaId}`);
+}
