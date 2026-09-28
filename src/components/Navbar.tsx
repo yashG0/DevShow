@@ -1,5 +1,16 @@
-import { LayoutDashboard, LogOut } from "lucide-react"
-import { NavLink, Link, useNavigate } from "react-router-dom"
+import {
+  ChevronDown,
+  Code2,
+  FolderGit2,
+  Home,
+  LogOut,
+  UserRound,
+} from "lucide-react"
+import {
+  Link,
+  NavLink,
+  useNavigate,
+} from "react-router-dom"
 
 import { useAuth } from "../auth/AuthProvider"
 import { ThemeSwitcher } from "./ThemeSwitcher"
@@ -15,73 +26,103 @@ export function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--background)]/85 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--background)]/95 backdrop-blur-xl">
+      <div className="mx-auto flex h-16 max-w-7xl items-center px-5 sm:px-6">
+        {/* Brand */}
+
         <Link
           to="/"
-          className="text-lg font-semibold tracking-tight"
+          className="group flex items-center gap-2.5"
         >
-          Dev<span className="text-[var(--accent)]">Show</span>
+          <div className="flex h-8 w-8 items-center justify-center rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] text-[var(--accent)] transition-colors group-hover:border-[var(--accent)]/40">
+            <Code2 size={17} strokeWidth={2.2} />
+          </div>
+
+          <span className="text-[15px] font-semibold tracking-[-0.02em]">
+            Dev<span className="text-[var(--accent)]">Show</span>
+          </span>
         </Link>
 
-        <nav className="flex items-center gap-1">
-          <NavLink
+        {/* Navigation */}
+
+        <nav className="ml-8 hidden items-center gap-1 md:flex">
+          <NavItem
             to="/"
-            className={({ isActive }) =>
-              [
-                "hidden rounded-[var(--radius-md)] px-3 py-2 text-sm font-medium transition-colors sm:block",
-                isActive
-                  ? "text-[var(--text)]"
-                  : "text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] hover:text-[var(--text)]",
-              ].join(" ")
-            }
+            icon={<Home size={15} />}
           >
             Home
-          </NavLink>
+          </NavItem>
 
+          {user && (
+            <>
+              <NavItem
+                to="/dashboard"
+                icon={<FolderGit2 size={15} />}
+              >
+                Projects
+              </NavItem>
+
+              <NavItem
+                to="/profile"
+                icon={<UserRound size={15} />}
+              >
+                Profile
+              </NavItem>
+            </>
+          )}
+        </nav>
+
+        {/* Right side */}
+
+        <div className="ml-auto flex items-center gap-2">
           {user ? (
             <>
-              <NavLink
-                to="/dashboard"
-                className={({ isActive }) =>
-                  [
-                    "inline-flex items-center gap-2 rounded-[var(--radius-md)] px-3 py-2 text-sm font-medium transition-colors",
-                    isActive
-                      ? "bg-[var(--surface)] text-[var(--text)]"
-                      : "text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] hover:text-[var(--text)]",
-                  ].join(" ")
-                }
+              <div className="hidden h-5 w-px bg-[var(--border)] sm:block" />
+
+              {/* User */}
+
+              <button
+                type="button"
+                onClick={() => navigate("/profile")}
+                className="group hidden items-center gap-2 rounded-[var(--radius-md)] px-2 py-1.5 transition-colors hover:bg-[var(--surface-hover)] sm:flex"
               >
-                <LayoutDashboard size={16} />
-                <span className="hidden sm:inline">
-                  Dashboard
-                </span>
-              </NavLink>
+                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[var(--accent)] text-[11px] font-semibold text-[var(--accent-foreground)]">
+                  {user.display_name
+                    ?.charAt(0)
+                    .toUpperCase()}
+                </div>
 
-              <div className="mx-2 hidden h-6 w-px bg-[var(--border)] sm:block" />
+                <div className="max-w-28 text-left">
+                  <p className="truncate text-xs font-medium">
+                    {user.display_name}
+                  </p>
 
-              <span className="hidden max-w-32 truncate px-2 text-sm font-medium sm:block">
-                {user.display_name}
-              </span>
+                  <p className="truncate text-[11px] text-[var(--text-muted)]">
+                    @{user.username}
+                  </p>
+                </div>
+
+                <ChevronDown
+                  size={14}
+                  className="text-[var(--text-muted)]"
+                />
+              </button>
 
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={handleLogout}
-                aria-label="Log out"
-                title="Log out"
+                className="hidden sm:inline-flex"
               >
-                <LogOut size={16} />
-                <span className="hidden sm:inline">
-                  Log out
-                </span>
+                <LogOut size={15} />
+                Log out
               </Button>
             </>
           ) : (
             <>
               <NavLink
                 to="/login"
-                className="hidden rounded-[var(--radius-md)] px-3 py-2 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-hover)] hover:text-[var(--text)] sm:block"
+                className="hidden px-3 py-2 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:text-[var(--text)] sm:block"
               >
                 Log in
               </NavLink>
@@ -95,11 +136,36 @@ export function Navbar() {
             </>
           )}
 
-          <div className="ml-1">
-            <ThemeSwitcher />
-          </div>
-        </nav>
+          <ThemeSwitcher />
+        </div>
       </div>
     </header>
+  )
+}
+
+function NavItem({
+  to,
+  icon,
+  children,
+}: {
+  to: string
+  icon: React.ReactNode
+  children: React.ReactNode
+}) {
+  return (
+    <NavLink
+      to={to}
+      className={({ isActive }) =>
+        [
+          "inline-flex items-center gap-2 rounded-[var(--radius-md)] px-3 py-2 text-sm font-medium transition-colors",
+          isActive
+            ? "bg-[var(--surface)] text-[var(--text)]"
+            : "text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] hover:text-[var(--text)]",
+        ].join(" ")
+      }
+    >
+      {icon}
+      {children}
+    </NavLink>
   )
 }

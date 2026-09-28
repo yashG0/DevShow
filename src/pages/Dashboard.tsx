@@ -2,8 +2,10 @@ import { ArrowUpRight, ExternalLink, Globe, Plus } from "lucide-react";
 
 import { useAuth } from "../auth/AuthProvider";
 import { Button } from "../components/ui/Button";
+import { useNavigate } from "react-router-dom";
 
 export function Dashboard() {
+  const navigate = useNavigate();
   const { user } = useAuth();
 
   const initials =
@@ -47,7 +49,11 @@ export function Dashboard() {
           </div>
 
           <div className="flex shrink-0 gap-2">
-            <Button variant="secondary" size="sm">
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => navigate("/profile")}
+            >
               Edit profile
             </Button>
 
