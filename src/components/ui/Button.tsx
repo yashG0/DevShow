@@ -1,3 +1,4 @@
+import { Spinner } from "./Spinner";
 import type { ButtonHTMLAttributes } from "react";
 
 type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
@@ -41,19 +42,32 @@ export function Button({
         "inline-flex items-center justify-center gap-2",
         "rounded-[var(--radius-md)]",
         "font-medium",
-        "transition-all duration-150",
+        "whitespace-nowrap",
+        "select-none",
+
+        "transition-[background-color,border-color,color,box-shadow,transform]",
+        "duration-150",
+        "ease-out",
+
         "focus-visible:outline-none",
         "focus-visible:ring-2",
-        "focus-visible:ring-[var(--accent)]",
+        "focus-visible:ring-[var(--accent)]/30",
+        "focus-visible:ring-offset-2",
+        "focus-visible:ring-offset-[var(--background)]",
+
+        "active:scale-[0.98]",
+
         "disabled:pointer-events-none",
         "disabled:opacity-50",
+
         variantClasses[variant],
         sizeClasses[size],
         className,
       ].join(" ")}
       {...props}
     >
-      {loading ? "Loading..." : children}
+      {loading && <Spinner size="sm" />}
+      {children}
     </button>
   );
 }

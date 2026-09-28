@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
-import { Button } from "../components/ui/Button"
+import { Button } from "../components/ui/Button";
 
 export function Home() {
   return (
@@ -18,23 +18,17 @@ export function Home() {
           </h1>
 
           <p className="mt-7 max-w-2xl text-lg leading-8 text-[var(--text-secondary)]">
-            DevShow gives developers a clean place to
-            present their projects, skills, and work —
-            without the noise.
+            DevShow gives developers a clean place to present their projects,
+            skills, and work — without the noise.
           </p>
 
           <div className="mt-9 flex flex-wrap gap-3">
             <Link to="/register">
-              <Button size="lg">
-                Create your profile
-              </Button>
+              <Button size="lg">Create your profile</Button>
             </Link>
 
             <Link to="/login">
-              <Button
-                size="lg"
-                variant="secondary"
-              >
+              <Button size="lg" variant="secondary">
                 Sign in
               </Button>
             </Link>
@@ -42,5 +36,5 @@ export function Home() {
         </div>
       </div>
     </section>
-  )
+  );
 }
