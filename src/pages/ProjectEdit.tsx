@@ -52,9 +52,7 @@ export function ProjectEdit() {
         setLoading(true);
         setError("");
 
-        const response = await api.get<Project>(
-          `/api/projects/${projectId}`,
-        );
+        const response = await api.get<Project>(`/api/projects/${projectId}`);
 
         const data = response.data;
 
@@ -67,9 +65,7 @@ export function ProjectEdit() {
         setTech(data.tech);
         setMedia(data.media ?? []);
       } catch (error) {
-        setError(
-          getApiErrorMessage(error, "Unable to load this project."),
-        );
+        setError(getApiErrorMessage(error, "Unable to load this project."));
       } finally {
         setLoading(false);
       }
@@ -89,9 +85,7 @@ export function ProjectEdit() {
     setTechInput("");
   }
 
-  function handleTechKeyDown(
-    event: KeyboardEvent<HTMLInputElement>,
-  ) {
+  function handleTechKeyDown(event: KeyboardEvent<HTMLInputElement>) {
     if (event.key === "Enter" || event.key === ",") {
       event.preventDefault();
       addTech();
@@ -99,14 +93,10 @@ export function ProjectEdit() {
   }
 
   function removeTech(value: string) {
-    setTech((current) =>
-      current.filter((item) => item !== value),
-    );
+    setTech((current) => current.filter((item) => item !== value));
   }
 
-  async function handleUpload(
-    event: ChangeEvent<HTMLInputElement>,
-  ) {
+  async function handleUpload(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
 
     if (!file || !project) {
@@ -117,19 +107,11 @@ export function ProjectEdit() {
       setUploading(true);
       setError("");
 
-      const uploaded = await uploadProjectMedia(
-        project.id,
-        file,
-      );
+      const uploaded = await uploadProjectMedia(project.id, file);
 
       setMedia((current) => [...current, uploaded]);
     } catch (error) {
-      setError(
-        getApiErrorMessage(
-          error,
-          "Unable to upload screenshot.",
-        ),
-      );
+      setError(getApiErrorMessage(error, "Unable to upload screenshot."));
     } finally {
       setUploading(false);
       event.target.value = "";
@@ -155,24 +137,15 @@ export function ProjectEdit() {
 
       await deleteProjectMedia(project.id, mediaId);
 
-      setMedia((current) =>
-        current.filter((item) => item.id !== mediaId),
-      );
+      setMedia((current) => current.filter((item) => item.id !== mediaId));
     } catch (error) {
-      setError(
-        getApiErrorMessage(
-          error,
-          "Unable to remove screenshot.",
-        ),
-      );
+      setError(getApiErrorMessage(error, "Unable to remove screenshot."));
     } finally {
       setDeletingMediaId(null);
     }
   }
 
-  async function handleSubmit(
-    event: FormEvent<HTMLFormElement>,
-  ) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     setError("");
@@ -196,27 +169,19 @@ export function ProjectEdit() {
     try {
       setSaving(true);
 
-      const response = await api.patch<Project>(
-        `/api/projects/${projectId}`,
-        {
-          title: title.trim(),
-          tagline: tagline.trim(),
-          description_md: description.trim(),
-          tech,
-          github_url: githubUrl.trim() || null,
-          demo_url: demoUrl.trim() || null,
-        },
-      );
+      const response = await api.patch<Project>(`/api/projects/${projectId}`, {
+        title: title.trim(),
+        tagline: tagline.trim(),
+        description_md: description.trim(),
+        tech,
+        github_url: githubUrl.trim() || null,
+        demo_url: demoUrl.trim() || null,
+      });
 
       setProject(response.data);
       setSaved(true);
     } catch (error) {
-      setError(
-        getApiErrorMessage(
-          error,
-          "Unable to save your project.",
-        ),
-      );
+      setError(getApiErrorMessage(error, "Unable to save your project."));
     } finally {
       setSaving(false);
     }
@@ -263,10 +228,7 @@ export function ProjectEdit() {
       {/* =========================================================
           PROJECT EDIT FORM
          ========================================================= */}
-      <form
-        onSubmit={handleSubmit}
-        className="mt-8"
-      >
+      <form onSubmit={handleSubmit} className="mt-8">
         {/* Editor header */}
         <header className="flex flex-col gap-6 border-b border-[var(--border)] pb-8 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -284,23 +246,26 @@ export function ProjectEdit() {
           </div>
 
           {/* Form actions */}
-          <div className="flex shrink-0 gap-2">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() =>
-                navigate(`/projects/${project.id}`)
-              }
-            >
-              Cancel
-            </Button>
+          <div className="flex shrink-0 flex-col items-end gap-2">
+            <div className="flex gap-2">
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => navigate(`/projects/${project.id}`)}
+              >
+                Cancel
+              </Button>
 
-            <Button
-              type="submit"
-              loading={saving}
-            >
-              Save changes
-            </Button>
+              <Button type="submit" loading={saving}>
+                Save changes
+              </Button>
+            </div>
+
+            {saved && (
+              <p role="status" className="text-xs text-[var(--success)]">
+                Project saved successfully.
+              </p>
+            )}
           </div>
         </header>
 
@@ -316,27 +281,21 @@ export function ProjectEdit() {
             <Input
               label="Title"
               value={title}
-              onChange={(event) =>
-                setTitle(event.target.value)
-              }
+              onChange={(event) => setTitle(event.target.value)}
               maxLength={150}
             />
 
             <Input
               label="Tagline"
               value={tagline}
-              onChange={(event) =>
-                setTagline(event.target.value)
-              }
+              onChange={(event) => setTagline(event.target.value)}
               maxLength={255}
             />
 
             <Textarea
               label="Description"
               value={description}
-              onChange={(event) =>
-                setDescription(event.target.value)
-              }
+              onChange={(event) => setDescription(event.target.value)}
               rows={14}
             />
 
@@ -362,19 +321,13 @@ export function ProjectEdit() {
                 <Input
                   label="Add technology"
                   value={techInput}
-                  onChange={(event) =>
-                    setTechInput(event.target.value)
-                  }
+                  onChange={(event) => setTechInput(event.target.value)}
                   onKeyDown={handleTechKeyDown}
                   placeholder="Python, React, PostgreSQL..."
                 />
               </div>
 
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={addTech}
-              >
+              <Button type="button" variant="secondary" onClick={addTech}>
                 <Plus size={16} />
                 Add
               </Button>
@@ -419,9 +372,7 @@ export function ProjectEdit() {
               label="GitHub repository"
               type="url"
               value={githubUrl}
-              onChange={(event) =>
-                setGithubUrl(event.target.value)
-              }
+              onChange={(event) => setGithubUrl(event.target.value)}
               placeholder="https://github.com/username/project"
             />
 
@@ -429,9 +380,7 @@ export function ProjectEdit() {
               label="Live demo"
               type="url"
               value={demoUrl}
-              onChange={(event) =>
-                setDemoUrl(event.target.value)
-              }
+              onChange={(event) => setDemoUrl(event.target.value)}
               placeholder="https://example.com"
             />
           </div>
@@ -446,15 +395,6 @@ export function ProjectEdit() {
             {error}
           </div>
         )}
-
-        {saved && (
-          <div
-            role="status"
-            className="mt-8 rounded-[var(--radius-md)] border border-[var(--success)]/20 bg-[var(--success)]/10 px-4 py-3 text-sm text-[var(--success)]"
-          >
-            Project saved successfully.
-          </div>
-        )}
       </form>
 
       {/* =========================================================
@@ -465,10 +405,7 @@ export function ProjectEdit() {
         <div className="flex items-start justify-between gap-6">
           <div>
             <div className="flex items-center gap-2">
-              <ImagePlus
-                size={17}
-                className="text-[var(--accent)]"
-              />
+              <ImagePlus size={17} className="text-[var(--accent)]" />
 
               <h2 className="text-lg font-semibold tracking-[-0.02em]">
                 Screenshots
@@ -476,8 +413,7 @@ export function ProjectEdit() {
             </div>
 
             <p className="mt-1.5 max-w-xl text-sm leading-6 text-[var(--text-secondary)]">
-              Showcase the interface, workflow, or key features
-              of your project.
+              Showcase the interface, workflow, or key features of your project.
             </p>
           </div>
 
@@ -490,8 +426,7 @@ export function ProjectEdit() {
         {media.length > 0 && (
           <div className="mt-6 grid gap-5 sm:grid-cols-2">
             {media.map((item, index) => {
-              const deleting =
-                deletingMediaId === item.id;
+              const deleting = deletingMediaId === item.id;
 
               return (
                 <div
@@ -505,8 +440,7 @@ export function ProjectEdit() {
                     <img
                       src={getMediaUrl(item.path)}
                       alt={
-                        item.alt ||
-                        `${project.title} screenshot ${index + 1}`
+                        item.alt || `${project.title} screenshot ${index + 1}`
                       }
                       className="h-full w-full object-contain"
                     />
@@ -519,18 +453,14 @@ export function ProjectEdit() {
                     {/* Remove */}
                     <button
                       type="button"
-                      onClick={() =>
-                        handleDeleteMedia(item.id)
-                      }
+                      onClick={() => handleDeleteMedia(item.id)}
                       disabled={deletingMediaId !== null}
                       aria-label={`Remove screenshot ${index + 1}`}
                       className="absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-md border border-[var(--danger)]/20 bg-[var(--surface)]/95 px-2.5 py-1.5 text-xs font-medium text-[var(--danger)] shadow-sm backdrop-blur transition-colors hover:bg-[var(--danger)]/10 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       <Trash2 size={13} />
 
-                      {deleting
-                        ? "Removing..."
-                        : "Remove"}
+                      {deleting ? "Removing..." : "Remove"}
                     </button>
                   </div>
 
@@ -560,26 +490,19 @@ export function ProjectEdit() {
         {media.length < 5 && (
           <label
             className={`mt-5 flex min-h-32 cursor-pointer flex-col items-center justify-center rounded-[var(--radius-lg)] border border-dashed border-[var(--border)] bg-[var(--surface)] px-6 py-8 text-center transition-colors hover:border-[var(--accent)]/50 hover:bg-[var(--surface-hover)] ${
-              uploading
-                ? "pointer-events-none opacity-60"
-                : ""
+              uploading ? "pointer-events-none opacity-60" : ""
             }`}
           >
             <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--background)]">
               {uploading ? (
                 <Spinner size="sm" />
               ) : (
-                <UploadCloud
-                  size={18}
-                  className="text-[var(--accent)]"
-                />
+                <UploadCloud size={18} className="text-[var(--accent)]" />
               )}
             </div>
 
             <p className="mt-3 text-sm font-medium text-[var(--text-primary)]">
-              {uploading
-                ? "Uploading screenshot..."
-                : "Add screenshot"}
+              {uploading ? "Uploading screenshot..." : "Add screenshot"}
             </p>
 
             <p className="mt-1 text-xs text-[var(--text-muted)]">
@@ -599,8 +522,7 @@ export function ProjectEdit() {
         {/* Limit */}
         {media.length === 5 && (
           <div className="mt-5 flex items-center justify-center rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-5 py-4 text-xs text-[var(--text-muted)]">
-            Maximum of 5 screenshots reached. Remove one
-            to upload another.
+            Maximum of 5 screenshots reached. Remove one to upload another.
           </div>
         )}
       </section>
@@ -624,9 +546,7 @@ function SectionHeading({
       </span>
 
       <div>
-        <h2 className="text-lg font-semibold tracking-[-0.02em]">
-          {title}
-        </h2>
+        <h2 className="text-lg font-semibold tracking-[-0.02em]">{title}</h2>
 
         <p className="mt-1.5 text-sm leading-6 text-[var(--text-secondary)]">
           {description}
