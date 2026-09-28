@@ -1,27 +1,30 @@
-import { Link, NavLink, useNavigate } from "react-router-dom";
-import { LogOut, LayoutDashboard } from "lucide-react";
+import { LayoutDashboard, LogOut } from "lucide-react"
+import { NavLink, Link, useNavigate } from "react-router-dom"
 
-import { useAuth } from "../auth/AuthProvider";
-import { Button } from "./ui/Button";
-import { ThemeSwitcher } from "./ThemeSwitcher";
+import { useAuth } from "../auth/AuthProvider"
+import { ThemeSwitcher } from "./ThemeSwitcher"
+import { Button } from "./ui/Button"
 
 export function Navbar() {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
+  const { user, logout } = useAuth()
+  const navigate = useNavigate()
 
   function handleLogout() {
-    logout();
-    navigate("/", { replace: true });
+    logout()
+    navigate("/", { replace: true })
   }
 
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--background)]/85 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        <Link to="/" className="text-lg font-semibold tracking-tight">
+        <Link
+          to="/"
+          className="text-lg font-semibold tracking-tight"
+        >
           Dev<span className="text-[var(--accent)]">Show</span>
         </Link>
 
-        <nav className="flex items-center gap-2">
+        <nav className="flex items-center gap-1">
           <NavLink
             to="/"
             className={({ isActive }) =>
@@ -50,14 +53,16 @@ export function Navbar() {
                 }
               >
                 <LayoutDashboard size={16} />
-                <span className="hidden sm:inline">Dashboard</span>
+                <span className="hidden sm:inline">
+                  Dashboard
+                </span>
               </NavLink>
 
-              <div className="hidden h-6 w-px bg-[var(--border)] sm:block" />
+              <div className="mx-2 hidden h-6 w-px bg-[var(--border)] sm:block" />
 
-              <div className="hidden max-w-32 truncate px-2 text-sm font-medium sm:block">
+              <span className="hidden max-w-32 truncate px-2 text-sm font-medium sm:block">
                 {user.display_name}
-              </div>
+              </span>
 
               <Button
                 variant="ghost"
@@ -67,7 +72,9 @@ export function Navbar() {
                 title="Log out"
               >
                 <LogOut size={16} />
-                <span className="hidden sm:inline">Log out</span>
+                <span className="hidden sm:inline">
+                  Log out
+                </span>
               </Button>
             </>
           ) : (
@@ -79,15 +86,20 @@ export function Navbar() {
                 Log in
               </NavLink>
 
-              <Button size="sm" onClick={() => navigate("/register")}>
+              <Button
+                size="sm"
+                onClick={() => navigate("/register")}
+              >
                 Get started
               </Button>
             </>
           )}
 
-          <ThemeSwitcher />
+          <div className="ml-1">
+            <ThemeSwitcher />
+          </div>
         </nav>
       </div>
     </header>
-  );
+  )
 }
