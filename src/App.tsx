@@ -8,6 +8,7 @@ import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import { Profile } from "./pages/Profile";
 import { ProjectCreate } from "./pages/ProjectCreate";
+import { ProjectDetail } from "./pages/ProjectDetail";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/projects/new" element={<ProjectCreate />} />
+            <Route path="/projects/:projectId" element={<ProjectDetail />} />
           </Route>
         </Routes>
       </AppLayout>
