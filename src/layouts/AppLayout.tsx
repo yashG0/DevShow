@@ -1,16 +1,13 @@
 import type { ReactNode } from "react"
-
 import { Navbar } from "../components/Navbar"
-
-type AppLayoutProps = {
-  children: ReactNode
-}
 
 export function AppLayout({
   children,
-}: AppLayoutProps) {
+}: {
+  children: ReactNode
+}) {
   return (
-    <div className="min-h-screen bg-[var(--background)] text-[var(--text-primary)]">
+    <div className="min-h-screen bg-[var(--background)] text-[var(--text)]">
       <Navbar />
 
       <main>{children}</main>
