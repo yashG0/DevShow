@@ -1,3 +1,4 @@
+import { api, getMediaUrl } from "../services/api";
 import {
   useEffect,
   useState,
@@ -12,7 +13,6 @@ import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
 import { Spinner } from "../components/ui/Spinner";
 import { Textarea } from "../components/ui/Textarea";
-import { api, getMediaUrl } from "../services/api";
 import { getApiErrorMessage } from "../services/errors";
 import {
   deleteProjectMedia,

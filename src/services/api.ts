@@ -18,5 +18,5 @@ api.interceptors.request.use((config) => {
 });
 
 export function getMediaUrl(path: string) {
-  return `${API_BASE_URL}/${path}`;
+  return `${API_BASE_URL}/${path.replace(/^\/+/, "")}`;
 }

@@ -8,7 +8,6 @@ import {
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
-
 import { Spinner } from "../components/ui/Spinner";
 import { api, getMediaUrl } from "../services/api";
 import { getApiErrorMessage } from "../services/errors";
@@ -170,22 +169,33 @@ export function PublicProject() {
       {/* Screenshots */}
       {project.media.length > 0 && (
         <section className="pt-10">
-          <div className="grid gap-5">
-            {project.media
-              .slice()
-              .sort((a, b) => a.position - b.position)
-              .map((media) => (
-                <div
-                  key={media.id}
-                  className="overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)]"
-                >
-                  <img
-                    src={getMediaUrl(media.path)}
-                    alt={media.alt ?? project.title}
-                    className="w-full object-cover"
-                  />
-                </div>
-              ))}
+          <div className="space-y-5">
+            {/* Hero screenshot */}
+            <div className="overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)]">
+              <img
+                src={getMediaUrl(project.media[0].path)}
+                alt={project.media[0].alt ?? project.title}
+                className="w-full object-cover"
+              />
+            </div>
+
+            {/* Gallery */}
+            {project.media.length > 1 && (
+              <div className="grid gap-5 sm:grid-cols-2">
+                {project.media.slice(1).map((media) => (
+                  <div
+                    key={media.id}
+                    className="overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)]"
+                  >
+                    <img
+                      src={getMediaUrl(media.path)}
+                      alt={media.alt ?? project.title}
+                      className="aspect-video w-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
       )}
