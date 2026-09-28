@@ -1,14 +1,16 @@
-import { api, getMediaUrl } from "../services/api";
+import { useEffect, useState } from "react";
 import {
-  useEffect,
-  useState,
-  type ChangeEvent,
-  type FormEvent,
-  type KeyboardEvent,
-} from "react";
-import { ArrowLeft, Plus, X } from "lucide-react";
+  ArrowLeft,
+  ImagePlus,
+  Plus,
+  Trash2,
+  UploadCloud,
+  X,
+} from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+import type { ChangeEvent, FormEvent, KeyboardEvent } from "react";
 
+import { api, getMediaUrl } from "../services/api";
 import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
 import { Spinner } from "../components/ui/Spinner";
@@ -28,6 +30,7 @@ export function ProjectEdit() {
   const [project, setProject] = useState<Project | null>(null);
   const [media, setMedia] = useState<ProjectMedia[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [deletingMediaId, setDeletingMediaId] = useState<number | null>(null);
 
   const [title, setTitle] = useState("");
   const [tagline, setTagline] = useState("");
@@ -115,11 +118,20 @@ export function ProjectEdit() {
   }
 
   async function handleDeleteMedia(mediaId: number) {
-    if (!project) {
+    if (!project || deletingMediaId !== null) {
+      return;
+    }
+
+    const confirmed = window.confirm(
+      "Remove this screenshot from the project?",
+    );
+
+    if (!confirmed) {
       return;
     }
 
     try {
+      setDeletingMediaId(mediaId);
       setError("");
 
       await deleteProjectMedia(project.id, mediaId);
@@ -127,6 +139,8 @@ export function ProjectEdit() {
       setMedia((current) => current.filter((item) => item.id !== mediaId));
     } catch (error) {
       setError(getApiErrorMessage(error, "Unable to remove screenshot."));
+    } finally {
+      setDeletingMediaId(null);
     }
   }
 
@@ -186,7 +200,7 @@ export function ProjectEdit() {
         <button
           type="button"
           onClick={() => navigate("/dashboard")}
-          className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--text)]"
+          className="inline-flex items-center gap-2 text-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--text)]"
         >
           <ArrowLeft size={15} />
           Workspace
@@ -225,6 +239,7 @@ export function ProjectEdit() {
       </div>
 
       <form onSubmit={handleSubmit} className="mt-10">
+        {/* Project details */}
         <section>
           <SectionHeading
             number="01"
@@ -262,6 +277,7 @@ export function ProjectEdit() {
 
         <div className="my-10 border-t border-[var(--border)]" />
 
+        {/* Technology */}
         <section>
           <SectionHeading
             number="02"
@@ -299,7 +315,8 @@ export function ProjectEdit() {
                     <button
                       type="button"
                       onClick={() => removeTech(item)}
-                      className="text-[var(--text-muted)] hover:text-[var(--text)]"
+                      aria-label={`Remove ${item}`}
+                      className="text-[var(--text-muted)] transition-colors hover:text-[var(--text)]"
                     >
                       <X size={13} />
                     </button>
@@ -312,6 +329,7 @@ export function ProjectEdit() {
 
         <div className="my-10 border-t border-[var(--border)]" />
 
+        {/* Links */}
         <section>
           <SectionHeading
             number="03"
@@ -371,49 +389,114 @@ export function ProjectEdit() {
         </div>
       </form>
 
-      <section className="mt-10 border-t border-[var(--border)] pt-8">
-        <div className="flex items-end justify-between gap-4">
+      {/* Screenshots */}
+      <section className="mt-12 border-t border-[var(--border)] pt-10">
+        <div className="flex items-start justify-between gap-6">
           <div>
-            <h2 className="text-sm font-semibold text-[var(--text-primary)]">
-              Screenshots
-            </h2>
+            <div className="flex items-center gap-2">
+              <ImagePlus size={17} className="text-[var(--accent)]" />
 
-            <p className="mt-1 text-sm text-[var(--text-secondary)]">
-              Add up to 5 screenshots to showcase your project.
+              <h2 className="text-lg font-semibold tracking-[-0.02em]">
+                Screenshots
+              </h2>
+            </div>
+
+            <p className="mt-1.5 max-w-xl text-sm leading-6 text-[var(--text-secondary)]">
+              Showcase the interface, workflow, or key features of your project.
             </p>
           </div>
 
-          <span className="font-mono text-xs text-[var(--text-muted)]">
-            {media.length}/5
-          </span>
+          <div className="shrink-0 rounded-full border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5 font-mono text-xs text-[var(--text-muted)]">
+            {media.length} / 5
+          </div>
         </div>
 
-        <div className="mt-5 grid gap-4 sm:grid-cols-2">
-          {media.map((item) => (
-            <div
-              key={item.id}
-              className="group relative overflow-hidden rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)]"
-            >
-              <img
-                src={getMediaUrl(item.path)}
-                alt={item.alt ?? ""}
-                className="aspect-video w-full object-cover"
-              />
+        {/* Screenshot grid */}
+        {media.length > 0 && (
+          <div className="mt-6 grid gap-5 sm:grid-cols-2">
+            {media.map((item, index) => {
+              const deleting = deletingMediaId === item.id;
 
-              <button
-                type="button"
-                onClick={() => handleDeleteMedia(item.id)}
-                className="absolute right-3 top-3 rounded-md border border-[var(--border)] bg-[var(--background)]/90 px-2.5 py-1.5 text-xs text-[var(--danger)] opacity-0 transition-opacity group-hover:opacity-100"
-              >
-                Remove
-              </button>
-            </div>
-          ))}
-        </div>
+              return (
+                <div
+                  key={item.id}
+                  className={`group overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] transition-colors hover:border-[var(--accent)]/40 ${
+                    deleting ? "opacity-60" : ""
+                  }`}
+                >
+                  {/* Image */}
+                  <div className="relative flex aspect-video items-center justify-center overflow-hidden bg-[var(--background)]">
+                    <img
+                      src={getMediaUrl(item.path)}
+                      alt={
+                        item.alt || `${project.title} screenshot ${index + 1}`
+                      }
+                      className="h-full w-full object-contain"
+                    />
 
+                    {/* Screenshot number */}
+                    <div className="absolute left-3 top-3 rounded-md border border-[var(--border)] bg-[var(--surface)]/90 px-2 py-1 font-mono text-[11px] text-[var(--text-muted)] backdrop-blur">
+                      {String(index + 1).padStart(2, "0")}
+                    </div>
+
+                    {/* Remove button */}
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteMedia(item.id)}
+                      disabled={deletingMediaId !== null}
+                      aria-label={`Remove screenshot ${index + 1}`}
+                      className="absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-md border border-[var(--danger)]/20 bg-[var(--surface)]/95 px-2.5 py-1.5 text-xs font-medium text-[var(--danger)] shadow-sm backdrop-blur transition-colors hover:bg-[var(--danger)]/10 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      <Trash2 size={13} />
+
+                      {deleting ? "Removing..." : "Remove"}
+                    </button>
+                  </div>
+
+                  {/* Image metadata */}
+                  <div className="flex items-center justify-between gap-3 border-t border-[var(--border)] px-3.5 py-3">
+                    <div className="min-w-0">
+                      <p className="truncate text-xs font-medium text-[var(--text-secondary)]">
+                        Screenshot {index + 1}
+                      </p>
+
+                      <p className="mt-0.5 truncate font-mono text-[10px] text-[var(--text-muted)]">
+                        {item.alt || "Project media"}
+                      </p>
+                    </div>
+
+                    <span className="shrink-0 font-mono text-[10px] text-[var(--text-muted)]">
+                      #{item.position + 1}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Upload area */}
         {media.length < 5 && (
-          <label className="mt-4 flex cursor-pointer items-center justify-center rounded-[var(--radius-md)] border border-dashed border-[var(--border)] px-5 py-8 text-sm text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-hover)]">
-            {uploading ? "Uploading..." : "Click to upload screenshot"}
+          <label
+            className={`mt-5 flex min-h-32 cursor-pointer flex-col items-center justify-center rounded-[var(--radius-lg)] border border-dashed border-[var(--border)] bg-[var(--surface)] px-6 py-8 text-center transition-colors hover:border-[var(--accent)]/50 hover:bg-[var(--surface-hover)] ${
+              uploading ? "pointer-events-none opacity-60" : ""
+            }`}
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--background)]">
+              {uploading ? (
+                <Spinner size="sm" />
+              ) : (
+                <UploadCloud size={18} className="text-[var(--accent)]" />
+              )}
+            </div>
+
+            <p className="mt-3 text-sm font-medium text-[var(--text-primary)]">
+              {uploading ? "Uploading screenshot..." : "Add screenshot"}
+            </p>
+
+            <p className="mt-1 text-xs text-[var(--text-muted)]">
+              PNG, JPEG or WebP · up to 5 MB
+            </p>
 
             <input
               type="file"
@@ -423,6 +506,13 @@ export function ProjectEdit() {
               onChange={handleUpload}
             />
           </label>
+        )}
+
+        {/* Limit reached */}
+        {media.length === 5 && (
+          <div className="mt-5 flex items-center justify-center rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] px-5 py-4 text-xs text-[var(--text-muted)]">
+            Maximum of 5 screenshots reached. Remove one to upload another.
+          </div>
         )}
       </section>
     </main>
