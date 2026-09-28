@@ -109,7 +109,7 @@ export function Dashboard() {
             </p>
           </div>
 
-          <Button size="sm">
+          <Button size="sm" onClick={() => navigate("/projects/new")}>
             <Plus size={16} />
             New project
           </Button>
