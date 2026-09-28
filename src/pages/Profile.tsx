@@ -1,27 +1,27 @@
-import { useState, type FormEvent } from "react"
-import { ArrowLeft, ExternalLink, Save } from "lucide-react"
-import { useNavigate } from "react-router-dom"
+import { useState, type FormEvent } from "react";
+import { ArrowLeft, ExternalLink, Save } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-import { useAuth } from "../auth/AuthProvider"
-import { Button } from "../components/ui/Button"
-import { Input } from "../components/ui/Input"
-import { Textarea } from "../components/ui/Textarea"
-import { getApiErrorMessage } from "../services/errors"
-import { api } from "../services/api"
+import { useAuth } from "../auth/AuthProvider";
+import { Button } from "../components/ui/Button";
+import { Input } from "../components/ui/Input";
+import { Textarea } from "../components/ui/Textarea";
+import { getApiErrorMessage } from "../services/errors";
+import { api } from "../services/api";
 
 export function Profile() {
-  const { user, refreshUser } = useAuth()
-  const navigate = useNavigate()
+  const { user, refreshUser } = useAuth();
+  const navigate = useNavigate();
 
-  const [displayName, setDisplayName] = useState(user?.display_name ?? "")
-  const [bio, setBio] = useState(user?.bio ?? "")
-  const [githubUrl, setGithubUrl] = useState(user?.github_url ?? "")
-  const [linkedinUrl, setLinkedinUrl] = useState(user?.linkedin_url ?? "")
-  const [websiteUrl, setWebsiteUrl] = useState(user?.website_url ?? "")
+  const [displayName, setDisplayName] = useState(user?.display_name ?? "");
+  const [bio, setBio] = useState(user?.bio ?? "");
+  const [githubUrl, setGithubUrl] = useState(user?.github_url ?? "");
+  const [linkedinUrl, setLinkedinUrl] = useState(user?.linkedin_url ?? "");
+  const [websiteUrl, setWebsiteUrl] = useState(user?.website_url ?? "");
 
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
-  const [saved, setSaved] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [saved, setSaved] = useState(false);
 
   const initials =
     user?.display_name
@@ -30,21 +30,21 @@ export function Profile() {
       .map((part) => part[0])
       .slice(0, 2)
       .join("")
-      .toUpperCase() || "?"
+      .toUpperCase() || "?";
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
+    event.preventDefault();
 
-    setError("")
-    setSaved(false)
+    setError("");
+    setSaved(false);
 
     if (!displayName.trim()) {
-      setError("Display name is required.")
-      return
+      setError("Display name is required.");
+      return;
     }
 
     try {
-      setLoading(true)
+      setLoading(true);
 
       await api.patch("/api/me", {
         display_name: displayName.trim(),
@@ -52,16 +52,14 @@ export function Profile() {
         github_url: githubUrl.trim() || null,
         linkedin_url: linkedinUrl.trim() || null,
         website_url: websiteUrl.trim() || null,
-      })
+      });
 
-      await refreshUser()
-      setSaved(true)
+      await refreshUser();
+      setSaved(true);
     } catch (error) {
-      setError(
-        getApiErrorMessage(error, "Unable to save your profile."),
-      )
+      setError(getApiErrorMessage(error, "Unable to save your profile."));
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
@@ -109,7 +107,7 @@ export function Profile() {
               @{user?.username}
             </p>
 
-            <p className="mt-3 line-clamp-2 text-sm leading-6 text-[var(--text-secondary)]">
+            <p className="mt-3 line-clamp-3 whitespace-pre-line text-sm leading-6 text-[var(--text-secondary)]">
               {bio || "Your developer bio will appear here."}
             </p>
           </div>
@@ -150,9 +148,7 @@ export function Profile() {
             />
 
             <div>
-              <label className="mb-2 block text-sm font-medium">
-                Username
-              </label>
+              <label className="mb-2 block text-sm font-medium">Username</label>
 
               <div className="flex items-center rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] px-3.5 py-2.5 text-sm">
                 <span className="mr-1 text-[var(--text-muted)]">@</span>
@@ -267,7 +263,7 @@ export function Profile() {
         </div>
       </form>
     </main>
-  )
+  );
 }
 
 function SectionHeading({
@@ -275,9 +271,9 @@ function SectionHeading({
   title,
   description,
 }: {
-  eyebrow: string
-  title: string
-  description: string
+  eyebrow: string;
+  title: string;
+  description: string;
 }) {
   return (
     <div className="flex gap-4">
@@ -286,14 +282,12 @@ function SectionHeading({
       </span>
 
       <div>
-        <h2 className="text-lg font-semibold tracking-[-0.02em]">
-          {title}
-        </h2>
+        <h2 className="text-lg font-semibold tracking-[-0.02em]">{title}</h2>
 
         <p className="mt-1.5 max-w-xl text-sm leading-6 text-[var(--text-secondary)]">
           {description}
         </p>
       </div>
     </div>
-  )
+  );
 }

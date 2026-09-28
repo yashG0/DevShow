@@ -41,7 +41,7 @@ export function Dashboard() {
                 @{user?.username}
               </p>
 
-              <p className="mt-4 max-w-2xl text-sm leading-6 text-[var(--text-secondary)]">
+              <p className="mt-4 max-w-2xl whitespace-pre-line text-sm leading-6 text-[var(--text-secondary)]">
                 {user?.bio ||
                   "Build something worth showing. Your developer profile and projects will live here."}
               </p>
@@ -105,7 +105,7 @@ export function Dashboard() {
             </h2>
 
             <p className="mt-2 text-sm text-[var(--text-secondary)]">
-              Build, publish and showcase what you've made.
+              Your projects, technologies and things you've built.
             </p>
           </div>
 
@@ -115,99 +115,18 @@ export function Dashboard() {
           </Button>
         </div>
 
-        <div className="mt-6 grid gap-4 md:grid-cols-2">
-          <button
-            type="button"
-            className="group min-h-52 rounded-[var(--radius-lg)] border border-dashed border-[var(--border)] bg-[var(--surface)] p-6 text-left transition-[border-color,background-color,transform] duration-150 hover:-translate-y-0.5 hover:border-[var(--accent)] hover:bg-[var(--surface-hover)]"
-          >
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--border)] text-[var(--text-secondary)] transition-colors group-hover:border-[var(--accent)] group-hover:text-[var(--accent)]">
-              <Plus size={17} />
+        <div className="mt-6 flex min-h-64 items-center justify-center rounded-[var(--radius-lg)] border border-dashed border-[var(--border)] bg-[var(--surface)] px-6 py-12 text-center">
+          <div>
+            <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--border)] text-[var(--text-muted)]">
+              <Plus size={18} />
             </div>
 
-            <h3 className="mt-8 text-base font-semibold">
-              Add your first project
-            </h3>
+            <h3 className="mt-5 text-base font-semibold">No projects yet</h3>
 
-            <p className="mt-2 max-w-sm text-sm leading-6 text-[var(--text-secondary)]">
-              Show what you build with a project page containing your
-              description, stack, links and screenshots.
+            <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-[var(--text-secondary)]">
+              Your projects will appear here once you create your first one.
             </p>
-
-            <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-[var(--accent)]">
-              Create a project
-              <ArrowUpRight size={14} />
-            </span>
-          </button>
-
-          <div className="min-h-52 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-6">
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-xs uppercase tracking-[0.12em] text-[var(--text-muted)]">
-                DevShow
-              </span>
-
-              <span className="rounded-full border border-[var(--border)] px-2.5 py-1 text-xs text-[var(--text-muted)]">
-                Ready
-              </span>
-            </div>
-
-            <div className="mt-10">
-              <p className="text-sm font-medium">Your portfolio starts here.</p>
-              <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-                Add projects to turn your profile into a public developer
-                showcase.
-              </p>
-            </div>
           </div>
-        </div>
-      </section>
-
-      {/* Developer profile summary */}
-      <section className="mt-12">
-        <div className="border-b border-[var(--border)] pb-5">
-          <p className="font-mono text-xs uppercase tracking-[0.14em] text-[var(--text-muted)]">
-            Developer identity
-          </p>
-
-          <div className="mt-1.5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <h2 className="text-2xl font-semibold tracking-[-0.035em]">
-                Profile
-              </h2>
-              <p className="mt-2 text-sm text-[var(--text-secondary)]">
-                The information displayed on your public developer profile.
-              </p>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => navigate("/profile")}
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--accent)] hover:text-[var(--accent-hover)]"
-            >
-              Edit profile
-              <ArrowUpRight size={14} />
-            </button>
-          </div>
-        </div>
-
-        <div className="divide-y divide-[var(--border)]">
-          <ProfileDetail
-            label="Name"
-            value={user?.display_name || "Not added"}
-          />
-
-          <ProfileDetail
-            label="Username"
-            value={user?.username ? `@${user.username}` : "Not added"}
-            mono
-          />
-
-          <ProfileDetail label="Email" value={user?.email || "Not available"} />
-
-          <ProfileDetail
-            label="Bio"
-            value={user?.bio || "Not added"}
-            muted={!user?.bio}
-          />
         </div>
       </section>
     </main>
