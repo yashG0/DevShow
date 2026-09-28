@@ -1,12 +1,27 @@
-import { ArrowUpRight, ExternalLink, Plus, Terminal } from "lucide-react";
+import {
+  ArrowUpRight,
+  ExternalLink,
+  Eye,
+  FolderGit2,
+  Plus,
+  Terminal,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../auth/AuthProvider";
 import { Button } from "../components/ui/Button";
+import { Spinner } from "../components/ui/Spinner";
+import { getApiErrorMessage } from "../services/errors";
+import { getProjects, type Project } from "../services/projects";
 
 export function Dashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const initials =
     user?.display_name
@@ -17,18 +32,36 @@ export function Dashboard() {
       .join("")
       .toUpperCase() || "?";
 
+  useEffect(() => {
+    async function loadProjects() {
+      try {
+        setLoading(true);
+        setError("");
+
+        const data = await getProjects();
+        setProjects(data);
+      } catch (error) {
+        setError(getApiErrorMessage(error, "Unable to load your projects."));
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadProjects();
+  }, []);
+
   return (
     <main className="mx-auto max-w-6xl px-6 py-10 lg:px-8 lg:py-14">
       {/* Developer identity */}
       <section>
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div className="flex min-w-0 items-start gap-5">
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[var(--accent)] text-lg font-semibold text-[var(--accent-foreground)] shadow-sm">
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[var(--accent)] text-lg font-semibold text-[var(--accent-foreground)]">
               {initials}
             </div>
 
             <div className="min-w-0">
-              <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-[0.14em] text-[var(--text-muted)]">
+              <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-[var(--text-muted)]">
                 <Terminal size={13} />
                 Workspace
               </div>
@@ -84,7 +117,7 @@ export function Dashboard() {
             <button
               type="button"
               onClick={() => navigate("/profile")}
-              className="text-sm text-[var(--accent)] transition-colors hover:text-[var(--accent-hover)]"
+              className="text-sm text-[var(--accent)] hover:text-[var(--accent-hover)]"
             >
               Add your developer links →
             </button>
@@ -115,21 +148,146 @@ export function Dashboard() {
           </Button>
         </div>
 
-        <div className="mt-6 flex min-h-64 items-center justify-center rounded-[var(--radius-lg)] border border-dashed border-[var(--border)] bg-[var(--surface)] px-6 py-12 text-center">
-          <div>
-            <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--border)] text-[var(--text-muted)]">
-              <Plus size={18} />
-            </div>
-
-            <h3 className="mt-5 text-base font-semibold">No projects yet</h3>
-
-            <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-[var(--text-secondary)]">
-              Your projects will appear here once you create your first one.
-            </p>
+        {loading && (
+          <div className="flex min-h-64 items-center justify-center">
+            <Spinner size="lg" />
           </div>
-        </div>
+        )}
+
+        {!loading && error && (
+          <div
+            role="alert"
+            className="mt-6 rounded-[var(--radius-md)] border border-[var(--danger)]/20 bg-[var(--danger)]/10 px-4 py-3 text-sm text-[var(--danger)]"
+          >
+            {error}
+          </div>
+        )}
+
+        {!loading && !error && projects.length === 0 && (
+          <div className="mt-6 flex min-h-64 items-center justify-center rounded-[var(--radius-lg)] border border-dashed border-[var(--border)] bg-[var(--surface)] px-6 py-12 text-center">
+            <div>
+              <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--border)] text-[var(--text-muted)]">
+                <FolderGit2 size={18} />
+              </div>
+
+              <h3 className="mt-5 text-base font-semibold">No projects yet</h3>
+
+              <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-[var(--text-secondary)]">
+                Your projects will appear here once you create your first one.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {!loading && !error && projects.length > 0 && (
+          <div className="mt-6 divide-y divide-[var(--border)] rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)]">
+            {projects.map((project) => (
+              <ProjectRow
+                key={project.id}
+                project={project}
+                onOpen={() => navigate(`/projects/${project.id}`)}
+              />
+            ))}
+          </div>
+        )}
       </section>
     </main>
+  );
+}
+
+function ProjectRow({
+  project,
+  onOpen,
+}: {
+  project: Project;
+  onOpen: () => void;
+}) {
+  return (
+    <article className="group p-5 transition-colors hover:bg-[var(--surface-hover)] sm:p-6">
+      <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={onOpen}
+              className="text-left text-lg font-semibold tracking-[-0.025em] hover:text-[var(--accent)]"
+            >
+              {project.title}
+            </button>
+
+            <span
+              className={[
+                "rounded-full border px-2 py-0.5 text-[11px] font-medium",
+                project.is_published
+                  ? "border-[var(--success)]/25 bg-[var(--success)]/10 text-[var(--success)]"
+                  : "border-[var(--border)] text-[var(--text-muted)]",
+              ].join(" ")}
+            >
+              {project.is_published ? "Published" : "Draft"}
+            </span>
+          </div>
+
+          <p className="mt-1.5 text-sm leading-6 text-[var(--text-secondary)]">
+            {project.tagline}
+          </p>
+
+          {project.tech.length > 0 && (
+            <div className="mt-4 flex flex-wrap gap-1.5">
+              {project.tech.map((item) => (
+                <span
+                  key={item}
+                  className="rounded-md border border-[var(--border)] px-2 py-1 font-mono text-[11px] text-[var(--text-secondary)]"
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
+          )}
+
+          <div className="mt-4 flex items-center gap-4 text-xs text-[var(--text-muted)]">
+            <span className="inline-flex items-center gap-1.5">
+              <Eye size={13} />
+              {project.view_count} views
+            </span>
+
+            {project.github_url && (
+              <a
+                href={project.github_url}
+                target="_blank"
+                rel="noreferrer"
+                onClick={(event) => event.stopPropagation()}
+                className="inline-flex items-center gap-1.5 hover:text-[var(--text)]"
+              >
+                GitHub
+                <ExternalLink size={12} />
+              </a>
+            )}
+
+            {project.demo_url && (
+              <a
+                href={project.demo_url}
+                target="_blank"
+                rel="noreferrer"
+                onClick={(event) => event.stopPropagation()}
+                className="inline-flex items-center gap-1.5 hover:text-[var(--text)]"
+              >
+                Demo
+                <ExternalLink size={12} />
+              </a>
+            )}
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={onOpen}
+          className="inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:text-[var(--accent)]"
+        >
+          Open
+          <ArrowUpRight size={14} />
+        </button>
+      </div>
+    </article>
   );
 }
 
@@ -144,33 +302,5 @@ function ProfileLink({ label, href }: { label: string; href: string }) {
       {label}
       <ExternalLink size={13} className="opacity-50" />
     </a>
-  );
-}
-
-function ProfileDetail({
-  label,
-  value,
-  muted = false,
-  mono = false,
-}: {
-  label: string;
-  value: string;
-  muted?: boolean;
-  mono?: boolean;
-}) {
-  return (
-    <div className="grid gap-1 py-5 sm:grid-cols-[160px_1fr] sm:gap-8">
-      <span className="text-sm text-[var(--text-secondary)]">{label}</span>
-
-      <span
-        className={[
-          "text-sm",
-          muted ? "text-[var(--text-muted)]" : "text-[var(--text)]",
-          mono ? "font-mono" : "",
-        ].join(" ")}
-      >
-        {value}
-      </span>
-    </div>
   );
 }
