@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { ChangeEvent, FormEvent, KeyboardEvent } from "react";
-
+import ReactMarkdown from "react-markdown";
 import { api, getMediaUrl } from "../services/api";
 import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
@@ -292,16 +292,52 @@ export function ProjectEdit() {
               maxLength={255}
             />
 
-            <Textarea
-              label="Description"
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-              rows={14}
-            />
+            <div>
+              <label className="text-sm font-medium text-[var(--text)]">
+                Description
+              </label>
 
-            <p className="text-xs text-[var(--text-muted)]">
-              Markdown is supported.
-            </p>
+              <div className="mt-2 grid gap-4 lg:grid-cols-2">
+                {/* Markdown editor */}
+                <div>
+                  <Textarea
+                    value={description}
+                    onChange={(event) => setDescription(event.target.value)}
+                    placeholder={`# LinkPulse
+
+            A website monitoring service built with Go and PostgreSQL.
+
+            ## Features
+
+            - Website health monitoring
+            - Uptime tracking
+            - REST API`}
+                    rows={16}
+                  />
+
+                  <p className="mt-2 text-xs text-[var(--text-muted)]">
+                    Markdown is supported.
+                  </p>
+                </div>
+
+                {/* Live preview */}
+                <div className="min-h-[320px] rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-5">
+                  <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-muted)]">
+                    Preview
+                  </p>
+
+                  <div className="prose-content">
+                    {description.trim() ? (
+                      <ReactMarkdown>{description}</ReactMarkdown>
+                    ) : (
+                      <p className="text-sm text-[var(--text-muted)]">
+                        Your Markdown preview will appear here.
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
