@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import {
   ArrowLeft,
+  ArrowDown,
+  ArrowUp,
   ImagePlus,
   Plus,
   Trash2,
@@ -143,6 +145,45 @@ export function ProjectEdit() {
       setError(getApiErrorMessage(error, "Unable to remove screenshot."));
     } finally {
       setDeletingMediaId(null);
+    }
+  }
+
+  async function handleMoveMedia(mediaId: number, direction: "up" | "down") {
+    if (!project) {
+      return;
+    }
+
+    const currentIndex = media.findIndex((item) => item.id === mediaId);
+
+    if (currentIndex === -1) {
+      return;
+    }
+
+    const targetIndex =
+      direction === "up" ? currentIndex - 1 : currentIndex + 1;
+
+    if (targetIndex < 0 || targetIndex >= media.length) {
+      return;
+    }
+
+    const reordered = [...media];
+    [reordered[currentIndex], reordered[targetIndex]] = [
+      reordered[targetIndex],
+      reordered[currentIndex],
+    ];
+
+    const previous = media;
+
+    setMedia(reordered);
+    setError("");
+
+    try {
+      await api.put(`/api/projects/${project.id}/media/reorder`, {
+        media_ids: reordered.map((item) => item.id),
+      });
+    } catch (error) {
+      setMedia(previous);
+      setError(getApiErrorMessage(error, "Unable to reorder screenshots."));
     }
   }
 
@@ -629,9 +670,31 @@ export function ProjectEdit() {
                       </p>
                     </div>
 
-                    <span className="shrink-0 rounded-full border border-[var(--border)] px-2 py-1 font-mono text-[10px] text-[var(--text-muted)]">
-                      #{item.position + 1}
-                    </span>
+                    <div className="flex shrink-0 items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => handleMoveMedia(item.id, "up")}
+                        disabled={index === 0}
+                        aria-label={`Move screenshot ${index + 1} up`}
+                        className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-[var(--border)] text-[var(--text-muted)] transition-colors hover:border-[var(--accent)]/40 hover:text-[var(--text)] disabled:cursor-not-allowed disabled:opacity-30"
+                      >
+                        <ArrowUp size={13} />
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleMoveMedia(item.id, "down")}
+                        disabled={index === media.length - 1}
+                        aria-label={`Move screenshot ${index + 1} down`}
+                        className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-[var(--border)] text-[var(--text-muted)] transition-colors hover:border-[var(--accent)]/40 hover:text-[var(--text)] disabled:cursor-not-allowed disabled:opacity-30"
+                      >
+                        <ArrowDown size={13} />
+                      </button>
+
+                      <span className="ml-1 rounded-full border border-[var(--border)] px-2 py-1 font-mono text-[10px] text-[var(--text-muted)]">
+                        #{index + 1}
+                      </span>
+                    </div>
                   </div>
                 </div>
               );
