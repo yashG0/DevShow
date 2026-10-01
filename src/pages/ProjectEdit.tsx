@@ -45,7 +45,8 @@ export function ProjectEdit() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [saved, setSaved] = useState(false);
-
+  const [mobilePreview, setMobilePreview] = useState(false);
+  
   useEffect(() => {
     async function loadProject() {
       try {
@@ -297,44 +298,90 @@ export function ProjectEdit() {
                 Description
               </label>
 
-              <div className="mt-2 grid gap-4 lg:grid-cols-2">
-                {/* Markdown editor */}
-                <div>
-                  <Textarea
-                    value={description}
-                    onChange={(event) => setDescription(event.target.value)}
-                    placeholder={`# LinkPulse
-
+              <div className="mt-2">
+                {/* Mobile tabs */}
+                <div
+                  className="mb-3 grid grid-cols-2 rounded-lg border border-[var(--border)] bg-[var(--surface)] p-1 lg:hidden"
+                  role="tablist"
+                  aria-label="Description editor"
+                >
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={!mobilePreview}
+                    onClick={() => setMobilePreview(false)}
+                    className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                      !mobilePreview
+                        ? "bg-[var(--background)] text-[var(--text)] shadow-sm"
+                        : "text-[var(--text-muted)] hover:text-[var(--text)]"
+                    }`}
+                  >
+                    Edit
+                  </button>
+              
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={mobilePreview}
+                    onClick={() => setMobilePreview(true)}
+                    className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                      mobilePreview
+                        ? "bg-[var(--background)] text-[var(--text)] shadow-sm"
+                        : "text-[var(--text-muted)] hover:text-[var(--text)]"
+                    }`}
+                  >
+                    Preview
+                  </button>
+                </div>
+              
+                {/* Editor + preview */}
+                <div className="grid gap-4 lg:grid-cols-2">
+                  {/* Markdown editor */}
+                  <div className={mobilePreview ? "hidden lg:block" : "block"}>
+                    <Textarea
+                      value={description}
+                      onChange={(event) => setDescription(event.target.value)}
+                      placeholder={`# LinkPulse
+              
               A website monitoring service built with Go and PostgreSQL.
-
+              
               ## Features
-
+              
               - Website health monitoring
               - Uptime tracking
               - REST API`}
-                    rows={16}
-                    className="h-[420px] resize-none"
-                  />
-
-                  <p className="mt-2 text-xs text-[var(--text-muted)]">
-                    Markdown is supported.
-                  </p>
-                </div>
-
-                {/* Live preview */}
-                <div className="h-[420px] overflow-y-auto rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-5">
-                  <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-muted)]">
-                    Preview
-                  </p>
-
-                  <div className="prose-content">
-                    {description.trim() ? (
-                      <ReactMarkdown>{description}</ReactMarkdown>
-                    ) : (
-                      <p className="text-sm text-[var(--text-muted)]">
-                        Your Markdown preview will appear here.
+                      rows={16}
+                      className="h-[420px] resize-none"
+                    />
+              
+                    <p className="mt-2 text-xs text-[var(--text-muted)]">
+                      Markdown is supported.
+                    </p>
+                  </div>
+              
+                  {/* Live preview */}
+                  <div
+                    className={
+                      mobilePreview
+                        ? "block"
+                        : "hidden lg:block"
+                    }
+                  >
+                    <div className="h-[420px] overflow-y-auto rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-5">
+                      <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-muted)]">
+                        Preview
                       </p>
-                    )}
+              
+                      <div className="prose-content">
+                        {description.trim() ? (
+                          <ReactMarkdown>{description}</ReactMarkdown>
+                        ) : (
+                          <p className="text-sm text-[var(--text-muted)]">
+                            Your Markdown preview will appear here.
+                          </p>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
