@@ -104,14 +104,14 @@ export function ProjectEdit() {
     if (!isDirty) {
       return;
     }
-  
+
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       event.preventDefault();
       event.returnValue = "";
     };
-  
+
     window.addEventListener("beforeunload", handleBeforeUnload);
-  
+
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
@@ -260,7 +260,7 @@ export function ProjectEdit() {
       });
 
       setProject(response.data);
-      
+
       setInitialForm({
         title: response.data.title,
         tagline: response.data.tagline,
@@ -269,7 +269,7 @@ export function ProjectEdit() {
         demoUrl: response.data.demo_url ?? "",
         tech: response.data.tech,
       });
-      
+
       setSaved(true);
     } catch (error) {
       setError(getApiErrorMessage(error, "Unable to save your project."));
