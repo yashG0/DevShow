@@ -51,12 +51,12 @@ export function Dashboard() {
   }, []);
 
   return (
-    <main className="mx-auto max-w-6xl px-6 py-10 lg:px-8 lg:py-14">
+    <main className="mx-auto max-w-6xl px-6 py-8 lg:px-8 lg:py-10">
       {/* Developer identity */}
       <section>
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-          <div className="flex min-w-0 items-start gap-5">
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[var(--accent)] text-lg font-semibold text-[var(--accent-foreground)]">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex min-w-0 items-start gap-4">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[var(--accent)] text-lg font-semibold text-[var(--accent-foreground)]">
               {initials}
             </div>
 
@@ -74,7 +74,7 @@ export function Dashboard() {
                 @{user?.username}
               </p>
 
-              <p className="mt-4 max-w-2xl whitespace-pre-line text-sm leading-6 text-[var(--text-secondary)]">
+              <p className="mt-3 max-w-2xl whitespace-pre-line text-sm leading-6 text-[var(--text-secondary)]">
                 {user?.bio ||
                   "Build something worth showing. Your developer profile and projects will live here."}
               </p>
@@ -100,7 +100,7 @@ export function Dashboard() {
           </div>
         </div>
 
-        <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3 border-b border-[var(--border)] pb-7">
+        <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 border-b border-[var(--border)] pb-7">
           {user?.github_url && (
             <ProfileLink label="GitHub" href={user.github_url} />
           )}
@@ -126,7 +126,7 @@ export function Dashboard() {
       </section>
 
       {/* Projects */}
-      <section className="mt-12">
+      <section className="mt-10">
         <div className="flex flex-col gap-4 border-b border-[var(--border)] pb-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="font-mono text-xs uppercase tracking-[0.14em] text-[var(--text-muted)]">
@@ -137,7 +137,7 @@ export function Dashboard() {
               Projects
             </h2>
 
-            <p className="mt-2 text-sm text-[var(--text-secondary)]">
+            <p className="mt-1.5 text-sm text-[var(--text-muted)]">
               Your projects, technologies and things you've built.
             </p>
           </div>
