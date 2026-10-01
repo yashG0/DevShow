@@ -41,7 +41,20 @@ type PublicProjectResponse = {
   developer: PublicDeveloper;
   project: PublicProjectData;
 };
+function getGitHubRepoName(url: string) {
+  try {
+    const pathname = new URL(url).pathname.replace(/^\/|\/$/g, "");
+    const parts = pathname.split("/");
 
+    if (parts.length >= 2) {
+      return `${parts[0]}/${parts[1]}`;
+    }
+  } catch {
+    // Fall back to the original URL.
+  }
+
+  return url;
+}
 export function PublicProject() {
   const { username, slug } = useParams();
   const navigate = useNavigate();
@@ -309,10 +322,7 @@ function ProjectLink({
         )}
       </span>
 
-      <ExternalLink
-        size={13}
-        className="shrink-0 text-[var(--text-muted)]"
-      />
+      <ExternalLink size={13} className="shrink-0 text-[var(--text-muted)]" />
     </a>
   );
 }
