@@ -176,7 +176,7 @@ export function PublicProject() {
         <section className="pt-8">
           {/* Main viewer */}
           <div className="overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)]">
-            <div className="relative flex min-h-[380px] items-center justify-center bg-[var(--background)] p-3 sm:min-h-[500px] sm:p-5 lg:min-h-[560px]">
+            <div className="relative flex min-h-[220px] items-center justify-center bg-[var(--background)] p-3 sm:min-h-[500px] sm:p-5 lg:min-h-[560px]">
               <img
                 src={getMediaUrl(selectedMedia.path)}
                 alt={selectedMedia.alt ?? project.title}
