@@ -204,47 +204,67 @@ function ProjectRow({
 }) {
   return (
     <article className="group p-5 transition-colors hover:bg-[var(--surface-hover)] sm:p-6">
-      <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
-        <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-2">
-            <button
-              type="button"
-              onClick={onOpen}
-              className="text-left text-lg font-semibold tracking-[-0.025em] hover:text-[var(--accent)]"
-            >
-              {project.title}
-            </button>
+      <div className="flex flex-col gap-6">
+        {/* Project header */}
+        <div className="flex items-start justify-between gap-6">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <button
+                type="button"
+                onClick={onOpen}
+                className="text-left text-lg font-semibold tracking-[-0.025em] transition-colors hover:text-[var(--accent)]"
+              >
+                {project.title}
+              </button>
 
-            <span
-              className={[
-                "rounded-full border px-2 py-0.5 text-[11px] font-medium",
-                project.is_published
-                  ? "border-[var(--success)]/25 bg-[var(--success)]/10 text-[var(--success)]"
-                  : "border-[var(--border)] text-[var(--text-muted)]",
-              ].join(" ")}
-            >
-              {project.is_published ? "Published" : "Draft"}
-            </span>
+              <span
+                className={[
+                  "rounded-full border px-2 py-0.5 text-[11px] font-medium",
+                  project.is_published
+                    ? "border-[var(--success)]/25 bg-[var(--success)]/10 text-[var(--success)]"
+                    : "border-[var(--border)] text-[var(--text-muted)]",
+                ].join(" ")}
+              >
+                {project.is_published ? "Published" : "Draft"}
+              </span>
+            </div>
+
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-[var(--text-secondary)]">
+              {project.tagline}
+            </p>
           </div>
 
-          <p className="mt-1.5 text-sm leading-6 text-[var(--text-secondary)]">
-            {project.tagline}
-          </p>
+          {/* Primary action */}
+          <button
+            type="button"
+            onClick={onOpen}
+            className="inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:text-[var(--accent)]"
+          >
+            Open
+            <ArrowUpRight
+              size={14}
+              className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            />
+          </button>
+        </div>
 
-          {project.tech.length > 0 && (
-            <div className="mt-4 flex flex-wrap gap-1.5">
-              {project.tech.map((item) => (
-                <span
-                  key={item}
-                  className="rounded-md border border-[var(--border)] px-2 py-1 font-mono text-[11px] text-[var(--text-secondary)]"
-                >
-                  {item}
-                </span>
-              ))}
-            </div>
-          )}
+        {/* Technology stack */}
+        {project.tech.length > 0 && (
+          <div className="flex flex-wrap gap-1.5">
+            {project.tech.map((item) => (
+              <span
+                key={item}
+                className="rounded-md border border-[var(--border)] px-2 py-1 font-mono text-[11px] text-[var(--text-secondary)] transition-colors group-hover:border-[var(--border-strong)]"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+        )}
 
-          <div className="mt-4 flex items-center gap-4 text-xs text-[var(--text-muted)]">
+        {/* Metadata + external links */}
+        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-[var(--border)]/70 pt-4">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[var(--text-muted)]">
             <span className="inline-flex items-center gap-1.5">
               <Eye size={13} />
               {project.view_count} views
@@ -256,7 +276,7 @@ function ProjectRow({
                 target="_blank"
                 rel="noreferrer"
                 onClick={(event) => event.stopPropagation()}
-                className="inline-flex items-center gap-1.5 hover:text-[var(--text)]"
+                className="inline-flex items-center gap-1.5 transition-colors hover:text-[var(--text)]"
               >
                 GitHub
                 <ExternalLink size={12} />
@@ -269,7 +289,7 @@ function ProjectRow({
                 target="_blank"
                 rel="noreferrer"
                 onClick={(event) => event.stopPropagation()}
-                className="inline-flex items-center gap-1.5 hover:text-[var(--text)]"
+                className="inline-flex items-center gap-1.5 transition-colors hover:text-[var(--text)]"
               >
                 Demo
                 <ExternalLink size={12} />
@@ -277,15 +297,6 @@ function ProjectRow({
             )}
           </div>
         </div>
-
-        <button
-          type="button"
-          onClick={onOpen}
-          className="inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:text-[var(--accent)]"
-        >
-          Open
-          <ArrowUpRight size={14} />
-        </button>
       </div>
     </article>
   );
