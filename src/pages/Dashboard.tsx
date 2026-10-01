@@ -31,7 +31,14 @@ export function Dashboard() {
       .slice(0, 2)
       .join("")
       .toUpperCase() || "?";
+  const totalViews = projects.reduce(
+    (total, project) => total + project.view_count,
+    0,
+  );
 
+  const publishedProjects = projects.filter(
+    (project) => project.is_published,
+  ).length;
   useEffect(() => {
     async function loadProjects() {
       try {
@@ -124,7 +131,44 @@ export function Dashboard() {
           )}
         </div>
       </section>
+      {/* Analytics */}
+      {!loading && !error && projects.length > 0 && (
+        <section className="mt-10">
+          <div className="mb-5">
+            <p className="font-mono text-xs uppercase tracking-[0.14em] text-[var(--text-muted)]">
+              Overview
+            </p>
 
+            <h2 className="mt-1.5 text-2xl font-semibold tracking-[-0.035em]">
+              Analytics
+            </h2>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5">
+              <div className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
+                <Eye size={15} />
+                Total views
+              </div>
+
+              <p className="mt-3 text-3xl font-semibold tracking-[-0.04em]">
+                {totalViews}
+              </p>
+            </div>
+
+            <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5">
+              <div className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
+                <FolderGit2 size={15} />
+                Published projects
+              </div>
+
+              <p className="mt-3 text-3xl font-semibold tracking-[-0.04em]">
+                {publishedProjects}
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
       {/* Projects */}
       <section className="mt-10">
         <div className="flex flex-col gap-4 border-b border-[var(--border)] pb-5 sm:flex-row sm:items-end sm:justify-between">
