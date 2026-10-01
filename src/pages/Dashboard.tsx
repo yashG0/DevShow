@@ -264,7 +264,7 @@ function ProjectRow({
 
         {/* Metadata + external links */}
         <div className="flex flex-wrap items-center justify-between gap-4 border-t border-[var(--border)]/70 pt-4">
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[var(--text-muted)]">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs">
             <span className="inline-flex items-center gap-1.5">
               <Eye size={13} />
               {project.view_count} views
@@ -276,7 +276,7 @@ function ProjectRow({
                 target="_blank"
                 rel="noreferrer"
                 onClick={(event) => event.stopPropagation()}
-                className="inline-flex items-center gap-1.5 transition-colors hover:text-[var(--text)]"
+                className="inline-flex items-center gap-1.5 text-[var(--text-secondary)] transition-colors hover:text-[var(--text)]"
               >
                 GitHub
                 <ExternalLink size={12} />
@@ -289,7 +289,7 @@ function ProjectRow({
                 target="_blank"
                 rel="noreferrer"
                 onClick={(event) => event.stopPropagation()}
-                className="inline-flex items-center gap-1.5 transition-colors hover:text-[var(--text)]"
+                className="inline-flex items-center gap-1.5 text-[var(--text-secondary)] transition-colors hover:text-[var(--text)]"
               >
                 Demo
                 <ExternalLink size={12} />
