@@ -305,14 +305,15 @@ export function ProjectEdit() {
                     onChange={(event) => setDescription(event.target.value)}
                     placeholder={`# LinkPulse
 
-            A website monitoring service built with Go and PostgreSQL.
+              A website monitoring service built with Go and PostgreSQL.
 
-            ## Features
+              ## Features
 
-            - Website health monitoring
-            - Uptime tracking
-            - REST API`}
+              - Website health monitoring
+              - Uptime tracking
+              - REST API`}
                     rows={16}
+                    className="h-[420px] resize-none"
                   />
 
                   <p className="mt-2 text-xs text-[var(--text-muted)]">
@@ -321,7 +322,7 @@ export function ProjectEdit() {
                 </div>
 
                 {/* Live preview */}
-                <div className="min-h-[320px] rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-5">
+                <div className="h-[420px] overflow-y-auto rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-5">
                   <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-muted)]">
                     Preview
                   </p>
