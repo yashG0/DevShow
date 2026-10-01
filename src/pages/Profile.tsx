@@ -1,7 +1,6 @@
-import { useState, type FormEvent } from "react";
 import { ArrowLeft, ExternalLink, Save } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
+import { useEffect, useState, type FormEvent } from "react";
 import { useAuth } from "../auth/AuthProvider";
 import { Button } from "../components/ui/Button";
 import { Input } from "../components/ui/Input";
@@ -22,6 +21,35 @@ export function Profile() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [saved, setSaved] = useState(false);
+
+  const [initialForm, setInitialForm] = useState({
+    displayName: user?.display_name ?? "",
+    bio: user?.bio ?? "",
+    githubUrl: user?.github_url ?? "",
+    linkedinUrl: user?.linkedin_url ?? "",
+    websiteUrl: user?.website_url ?? "",
+  });
+  const isDirty =
+    displayName !== initialForm.displayName ||
+    bio !== initialForm.bio ||
+    githubUrl !== initialForm.githubUrl ||
+    linkedinUrl !== initialForm.linkedinUrl ||
+    websiteUrl !== initialForm.websiteUrl;
+
+  useEffect(() => {
+    if (!isDirty) return;
+
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [isDirty]);
 
   const initials =
     user?.display_name
@@ -54,7 +82,17 @@ export function Profile() {
         website_url: websiteUrl.trim() || null,
       });
 
+      const updatedProfile = {
+        displayName: displayName.trim(),
+        bio: bio.trim(),
+        githubUrl: githubUrl.trim(),
+        linkedinUrl: linkedinUrl.trim(),
+        websiteUrl: websiteUrl.trim(),
+      };
+      
       await refreshUser();
+      
+      setInitialForm(updatedProfile);
       setSaved(true);
     } catch (error) {
       setError(getApiErrorMessage(error, "Unable to save your profile."));
@@ -256,9 +294,9 @@ export function Profile() {
             Cancel
           </Button>
 
-          <Button type="submit" loading={loading}>
+          <Button type="submit" loading={loading} disabled={!isDirty}>
             {!loading && <Save size={16} />}
-            Save profile
+            {isDirty ? "Save profile" : "Saved"}
           </Button>
         </div>
       </form>
