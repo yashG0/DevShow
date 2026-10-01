@@ -46,7 +46,7 @@ export function ProjectEdit() {
   const [error, setError] = useState("");
   const [saved, setSaved] = useState(false);
   const [mobilePreview, setMobilePreview] = useState(false);
-  
+
   useEffect(() => {
     async function loadProject() {
       try {
@@ -318,7 +318,7 @@ export function ProjectEdit() {
                   >
                     Edit
                   </button>
-              
+
                   <button
                     type="button"
                     role="tab"
@@ -333,7 +333,7 @@ export function ProjectEdit() {
                     Preview
                   </button>
                 </div>
-              
+
                 {/* Editor + preview */}
                 <div className="grid gap-4 lg:grid-cols-2">
                   {/* Markdown editor */}
@@ -342,36 +342,30 @@ export function ProjectEdit() {
                       value={description}
                       onChange={(event) => setDescription(event.target.value)}
                       placeholder={`# LinkPulse
-              
+
               A website monitoring service built with Go and PostgreSQL.
-              
+
               ## Features
-              
+
               - Website health monitoring
               - Uptime tracking
               - REST API`}
                       rows={16}
                       className="h-[420px] resize-none"
                     />
-              
+
                     <p className="mt-2 text-xs text-[var(--text-muted)]">
                       Markdown is supported.
                     </p>
                   </div>
-              
+
                   {/* Live preview */}
-                  <div
-                    className={
-                      mobilePreview
-                        ? "block"
-                        : "hidden lg:block"
-                    }
-                  >
+                  <div className={mobilePreview ? "block" : "hidden lg:block"}>
                     <div className="h-[420px] overflow-y-auto rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--surface)] p-5">
                       <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--text-muted)]">
                         Preview
                       </p>
-              
+
                       <div className="prose-content">
                         {description.trim() ? (
                           <ReactMarkdown
@@ -381,49 +375,47 @@ export function ProjectEdit() {
                                   {children}
                                 </h1>
                               ),
-                          
+
                               h2: ({ children }) => (
                                 <h2 className="mb-3 mt-7 text-xl font-semibold tracking-tight text-[var(--text)]">
                                   {children}
                                 </h2>
                               ),
-                          
+
                               h3: ({ children }) => (
                                 <h3 className="mb-2 mt-6 text-lg font-semibold text-[var(--text)]">
                                   {children}
                                 </h3>
                               ),
-                          
+
                               p: ({ children }) => (
                                 <p className="mb-4 leading-7 text-[var(--text-secondary)]">
                                   {children}
                                 </p>
                               ),
-                          
+
                               ul: ({ children }) => (
                                 <ul className="mb-5 ml-5 list-disc space-y-2 pl-4 text-[var(--text-secondary)] marker:text-[var(--text-muted)]">
                                   {children}
                                 </ul>
                               ),
-                          
+
                               ol: ({ children }) => (
                                 <ol className="mb-5 ml-5 list-decimal space-y-2 pl-4 text-[var(--text-secondary)] marker:text-[var(--text-muted)]">
                                   {children}
                                 </ol>
                               ),
-                          
+
                               li: ({ children }) => (
-                                <li className="pl-1 leading-6">
-                                  {children}
-                                </li>
+                                <li className="pl-1 leading-6">{children}</li>
                               ),
-                          
+
                               strong: ({ children }) => (
                                 <strong className="font-semibold text-[var(--text)]">
                                   {children}
                                 </strong>
                               ),
-                          
+
                               a: ({ children, href }) => (
                                 <a
                                   href={href}
@@ -434,13 +426,13 @@ export function ProjectEdit() {
                                   {children}
                                 </a>
                               ),
-                          
+
                               blockquote: ({ children }) => (
                                 <blockquote className="my-5 border-l-2 border-[var(--accent)] pl-4 italic text-[var(--text-muted)]">
                                   {children}
                                 </blockquote>
                               ),
-                          
+
                               code: ({ children }) => (
                                 <code className="rounded border border-[var(--border)] bg-[var(--background)] px-1.5 py-0.5 font-mono text-[0.85em] text-[var(--text)]">
                                   {children}
@@ -560,7 +552,7 @@ export function ProjectEdit() {
           SCREENSHOT MANAGEMENT
          ========================================================= */}
       <section className="mt-14 border-t border-[var(--border)] pt-10">
-        {/* Screenshot heading */}
+        {/* Header */}
         <div className="flex items-start justify-between gap-6">
           <div>
             <div className="flex items-center gap-2">
@@ -590,22 +582,24 @@ export function ProjectEdit() {
               return (
                 <div
                   key={item.id}
-                  className={`group overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] transition-colors hover:border-[var(--accent)]/40 ${
-                    deleting ? "opacity-60" : ""
+                  className={`group overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] transition-all ${
+                    deleting
+                      ? "opacity-60"
+                      : "hover:-translate-y-0.5 hover:border-[var(--accent)]/40 hover:shadow-sm"
                   }`}
                 >
                   {/* Image */}
-                  <div className="relative flex aspect-video items-center justify-center overflow-hidden bg-[var(--background)]">
+                  <div className="relative aspect-video overflow-hidden bg-[var(--background)]">
                     <img
                       src={getMediaUrl(item.path)}
                       alt={
                         item.alt || `${project.title} screenshot ${index + 1}`
                       }
-                      className="h-full w-full object-contain"
+                      className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-[1.015]"
                     />
 
-                    {/* Number */}
-                    <div className="absolute left-3 top-3 rounded-md border border-[var(--border)] bg-[var(--surface)]/90 px-2 py-1 font-mono text-[11px] text-[var(--text-muted)] backdrop-blur">
+                    {/* Position */}
+                    <div className="absolute left-3 top-3 rounded-md border border-[var(--border)] bg-[var(--surface)]/90 px-2 py-1 font-mono text-[11px] text-[var(--text-muted)] shadow-sm backdrop-blur">
                       {String(index + 1).padStart(2, "0")}
                     </div>
 
@@ -624,7 +618,7 @@ export function ProjectEdit() {
                   </div>
 
                   {/* Metadata */}
-                  <div className="flex items-center justify-between gap-3 border-t border-[var(--border)] px-3.5 py-3">
+                  <div className="flex items-center justify-between gap-3 border-t border-[var(--border)] px-4 py-3">
                     <div className="min-w-0">
                       <p className="truncate text-xs font-medium text-[var(--text-secondary)]">
                         Screenshot {index + 1}
@@ -635,7 +629,7 @@ export function ProjectEdit() {
                       </p>
                     </div>
 
-                    <span className="shrink-0 font-mono text-[10px] text-[var(--text-muted)]">
+                    <span className="shrink-0 rounded-full border border-[var(--border)] px-2 py-1 font-mono text-[10px] text-[var(--text-muted)]">
                       #{item.position + 1}
                     </span>
                   </div>
@@ -648,7 +642,7 @@ export function ProjectEdit() {
         {/* Upload */}
         {media.length < 5 && (
           <label
-            className={`mt-5 flex min-h-32 cursor-pointer flex-col items-center justify-center rounded-[var(--radius-lg)] border border-dashed border-[var(--border)] bg-[var(--surface)] px-6 py-8 text-center transition-colors hover:border-[var(--accent)]/50 hover:bg-[var(--surface-hover)] ${
+            className={`mt-5 flex min-h-36 cursor-pointer flex-col items-center justify-center rounded-[var(--radius-lg)] border border-dashed border-[var(--border)] bg-[var(--surface)] px-6 py-8 text-center transition-all hover:border-[var(--accent)]/50 hover:bg-[var(--surface-hover)] ${
               uploading ? "pointer-events-none opacity-60" : ""
             }`}
           >
