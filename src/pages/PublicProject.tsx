@@ -117,14 +117,14 @@ export function PublicProject() {
       </button>
 
       {/* Header */}
-      <header className="mt-8 border-b border-[var(--border)] pb-10">
+      <header className="mt-8 border-b border-[var(--border)] pb-8">
         <p className="font-mono text-xs uppercase tracking-[0.14em] text-[var(--accent)]">
           Project
         </p>
 
         <div className="mt-3 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <h1 className="text-4xl font-semibold tracking-[-0.05em] sm:text-5xl">
+            <h1 className="text-4xl font-semibold tracking-[-0.045em] sm:text-5xl lg:text-6xl">
               {project.title}
             </h1>
 
@@ -139,7 +139,7 @@ export function PublicProject() {
                 href={project.github_url}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-md border border-[var(--border)] bg-[var(--surface)] px-4 py-2.5 text-sm transition-colors hover:bg-[var(--surface-hover)]"
+                className="inline-flex items-center gap-2 rounded-md border border-[var(--border)] bg-[var(--surface)] px-4 py-2.5 text-sm text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-hover)] hover:text-[var(--text)]"
               >
                 <Code2 size={15} />
                 Source
@@ -173,10 +173,10 @@ export function PublicProject() {
 
       {/* Screenshots */}
       {sortedMedia.length > 0 && (
-        <section className="pt-10">
+        <section className="pt-8">
           {/* Main viewer */}
           <div className="overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)]">
-            <div className="relative flex min-h-[420px] items-center justify-center bg-[var(--background)] p-3 sm:min-h-[520px] sm:p-5">
+            <div className="relative flex min-h-[380px] items-center justify-center bg-[var(--background)] p-3 sm:min-h-[500px] sm:p-5 lg:min-h-[560px]">
               <img
                 src={getMediaUrl(selectedMedia.path)}
                 alt={selectedMedia.alt ?? project.title}
@@ -219,7 +219,7 @@ export function PublicProject() {
       )}
 
       {/* Content */}
-      <section className="grid gap-12 py-12 lg:grid-cols-[minmax(0,1fr)_260px]">
+      <section className="grid gap-12 border-t border-[var(--border)] py-12 lg:grid-cols-[minmax(0,1fr)_260px] lg:gap-16">
         <article>
           <div className="prose-content">
             <ReactMarkdown>{project.description_md}</ReactMarkdown>
@@ -227,7 +227,7 @@ export function PublicProject() {
         </article>
 
         <aside>
-          <div className="sticky top-24">
+          <div className="lg:sticky lg:top-24">
             <h2 className="font-mono text-xs uppercase tracking-[0.14em] text-[var(--text-muted)]">
               Built with
             </h2>
