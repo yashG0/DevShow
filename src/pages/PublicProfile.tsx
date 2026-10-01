@@ -92,7 +92,7 @@ export function PublicProfile() {
       <section className="border-b border-[var(--border)] pb-12">
         <div className="flex flex-col gap-7 sm:flex-row sm:items-start">
           {/* Avatar */}
-          <div className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] text-2xl font-semibold">
+          <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] text-2xl font-semibold">
             {profile.avatar_path ? (
               <img
                 src={profile.avatar_path}
@@ -110,7 +110,7 @@ export function PublicProfile() {
               Developer
             </p>
 
-            <h1 className="mt-2 text-4xl font-semibold tracking-[-0.05em] sm:text-5xl">
+            <h1 className="mt-2 text-3xl font-semibold tracking-[-0.045em] sm:text-4xl">
               {profile.display_name}
             </h1>
 
@@ -199,7 +199,7 @@ export function PublicProfile() {
                       className="text-left"
                     >
                       <div className="flex items-center gap-2">
-                        <h3 className="text-xl font-semibold tracking-[-0.025em] transition-colors group-hover:text-[var(--accent)]">
+                        <h3 className="text-2xl font-semibold tracking-[-0.025em] transition-colors group-hover:text-[var(--accent)]">
                           {project.title}
                         </h3>
 
@@ -229,7 +229,7 @@ export function PublicProfile() {
                     )}
 
                     {/* Project metadata */}
-                    <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[var(--text-muted)]">
+                    <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs">
                       <span>{project.view_count} views</span>
 
                       {project.github_url && (
@@ -281,7 +281,7 @@ function SocialLink({
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="inline-flex items-center gap-2 rounded-md border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--text-secondary)] transition-colors hover:bg-[var(--surface-hover)] hover:text-[var(--text)]"
+      className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--text)]"
     >
       {icon}
       {label}
