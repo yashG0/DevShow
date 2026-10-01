@@ -48,6 +48,14 @@ export function ProjectEdit() {
   const [error, setError] = useState("");
   const [saved, setSaved] = useState(false);
   const [mobilePreview, setMobilePreview] = useState(false);
+  const [initialForm, setInitialForm] = useState({
+    title: "",
+    tagline: "",
+    description: "",
+    githubUrl: "",
+    demoUrl: "",
+    tech: [] as string[],
+  });
 
   useEffect(() => {
     async function loadProject() {
@@ -67,6 +75,14 @@ export function ProjectEdit() {
         setDemoUrl(data.demo_url ?? "");
         setTech(data.tech);
         setMedia(data.media ?? []);
+        setInitialForm({
+          title: data.title,
+          tagline: data.tagline,
+          description: data.description_md,
+          githubUrl: data.github_url ?? "",
+          demoUrl: data.demo_url ?? "",
+          tech: data.tech,
+        });
       } catch (error) {
         setError(getApiErrorMessage(error, "Unable to load this project."));
       } finally {
@@ -76,7 +92,30 @@ export function ProjectEdit() {
 
     loadProject();
   }, [projectId]);
+  const isDirty =
+    title !== initialForm.title ||
+    tagline !== initialForm.tagline ||
+    description !== initialForm.description ||
+    githubUrl !== initialForm.githubUrl ||
+    demoUrl !== initialForm.demoUrl ||
+    JSON.stringify(tech) !== JSON.stringify(initialForm.tech);
 
+  useEffect(() => {
+    if (!isDirty) {
+      return;
+    }
+  
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+  
+    window.addEventListener("beforeunload", handleBeforeUnload);
+  
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [isDirty]);
   function addTech() {
     const value = techInput.trim();
 
@@ -221,6 +260,16 @@ export function ProjectEdit() {
       });
 
       setProject(response.data);
+      
+      setInitialForm({
+        title: response.data.title,
+        tagline: response.data.tagline,
+        description: response.data.description_md,
+        githubUrl: response.data.github_url ?? "",
+        demoUrl: response.data.demo_url ?? "",
+        tech: response.data.tech,
+      });
+      
       setSaved(true);
     } catch (error) {
       setError(getApiErrorMessage(error, "Unable to save your project."));
@@ -298,8 +347,8 @@ export function ProjectEdit() {
                 Cancel
               </Button>
 
-              <Button type="submit" loading={saving}>
-                Save changes
+              <Button type="submit" loading={saving} disabled={!isDirty}>
+                {isDirty ? "Save changes" : "Saved"}
               </Button>
             </div>
 
