@@ -374,7 +374,82 @@ export function ProjectEdit() {
               
                       <div className="prose-content">
                         {description.trim() ? (
-                          <ReactMarkdown>{description}</ReactMarkdown>
+                          <ReactMarkdown
+                            components={{
+                              h1: ({ children }) => (
+                                <h1 className="mb-4 text-2xl font-bold tracking-tight text-[var(--text)]">
+                                  {children}
+                                </h1>
+                              ),
+                          
+                              h2: ({ children }) => (
+                                <h2 className="mb-3 mt-7 text-xl font-semibold tracking-tight text-[var(--text)]">
+                                  {children}
+                                </h2>
+                              ),
+                          
+                              h3: ({ children }) => (
+                                <h3 className="mb-2 mt-6 text-lg font-semibold text-[var(--text)]">
+                                  {children}
+                                </h3>
+                              ),
+                          
+                              p: ({ children }) => (
+                                <p className="mb-4 leading-7 text-[var(--text-secondary)]">
+                                  {children}
+                                </p>
+                              ),
+                          
+                              ul: ({ children }) => (
+                                <ul className="mb-5 ml-5 list-disc space-y-2 pl-4 text-[var(--text-secondary)] marker:text-[var(--text-muted)]">
+                                  {children}
+                                </ul>
+                              ),
+                          
+                              ol: ({ children }) => (
+                                <ol className="mb-5 ml-5 list-decimal space-y-2 pl-4 text-[var(--text-secondary)] marker:text-[var(--text-muted)]">
+                                  {children}
+                                </ol>
+                              ),
+                          
+                              li: ({ children }) => (
+                                <li className="pl-1 leading-6">
+                                  {children}
+                                </li>
+                              ),
+                          
+                              strong: ({ children }) => (
+                                <strong className="font-semibold text-[var(--text)]">
+                                  {children}
+                                </strong>
+                              ),
+                          
+                              a: ({ children, href }) => (
+                                <a
+                                  href={href}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="text-[var(--accent)] underline underline-offset-4"
+                                >
+                                  {children}
+                                </a>
+                              ),
+                          
+                              blockquote: ({ children }) => (
+                                <blockquote className="my-5 border-l-2 border-[var(--accent)] pl-4 italic text-[var(--text-muted)]">
+                                  {children}
+                                </blockquote>
+                              ),
+                          
+                              code: ({ children }) => (
+                                <code className="rounded border border-[var(--border)] bg-[var(--background)] px-1.5 py-0.5 font-mono text-[0.85em] text-[var(--text)]">
+                                  {children}
+                                </code>
+                              ),
+                            }}
+                          >
+                            {description}
+                          </ReactMarkdown>
                         ) : (
                           <p className="text-sm text-[var(--text-muted)]">
                             Your Markdown preview will appear here.
