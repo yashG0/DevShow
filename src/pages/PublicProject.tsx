@@ -263,7 +263,11 @@ export function PublicProject() {
 
                 <div className="mt-3 space-y-2">
                   {project.github_url && (
-                    <ProjectLink href={project.github_url} label="GitHub" />
+                    <ProjectLink
+                      href={project.github_url}
+                      label="GitHub"
+                      detail={getGitHubRepoName(project.github_url)}
+                    />
                   )}
 
                   {project.demo_url && (
@@ -279,16 +283,36 @@ export function PublicProject() {
   );
 }
 
-function ProjectLink({ href, label }: { href: string; label: string }) {
+function ProjectLink({
+  href,
+  label,
+  detail,
+}: {
+  href: string;
+  label: string;
+  detail?: string;
+}) {
   return (
     <a
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="flex items-center justify-between rounded-md border border-[var(--border)] bg-[var(--surface)] px-3.5 py-3 text-sm transition-colors hover:bg-[var(--surface-hover)]"
+      className="flex items-center justify-between gap-4 rounded-md border border-[var(--border)] bg-[var(--surface)] px-3.5 py-3 text-sm transition-colors hover:bg-[var(--surface-hover)]"
     >
-      <span>{label}</span>
-      <ExternalLink size={13} className="text-[var(--text-muted)]" />
+      <span className="min-w-0">
+        <span className="block font-medium">{label}</span>
+
+        {detail && (
+          <span className="mt-0.5 block truncate font-mono text-xs text-[var(--text-muted)]">
+            {detail}
+          </span>
+        )}
+      </span>
+
+      <ExternalLink
+        size={13}
+        className="shrink-0 text-[var(--text-muted)]"
+      />
     </a>
   );
 }
