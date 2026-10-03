@@ -1,11 +1,4 @@
-import {
-  ArrowUpRight,
-  Code2,
-  Eye,
-  FolderGit2,
-  GitBranch,
-  Terminal,
-} from "lucide-react";
+import { ArrowUpRight, Code2, FolderGit2, Terminal } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -172,23 +165,23 @@ export function Home() {
                       <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--accent)] text-sm font-semibold text-[var(--accent-foreground)]">
                         {user?.display_name?.charAt(0).toUpperCase() || "D"}
                       </div>
-                
+
                       <div>
                         <div className="font-semibold">
                           {user?.display_name || "Developer"}
                         </div>
-                
+
                         <div className="font-mono text-xs text-[var(--text-muted)]">
                           @{user?.username || "yourusername"}
                         </div>
                       </div>
                     </div>
-                
+
                     <span className="hidden rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2 py-1 font-mono text-[9px] text-emerald-500 sm:inline-flex">
                       available
                     </span>
                   </div>
-                
+
                   {/* Developer intro */}
                   <div className="mt-6 border-l-2 border-[var(--accent)]/30 pl-3">
                     <p className="text-xs leading-5 text-[var(--text-secondary)]">
@@ -196,7 +189,7 @@ export function Home() {
                       products.
                     </p>
                   </div>
-                
+
                   {/* Projects */}
                   <div className="mt-7">
                     <div className="flex items-center justify-between">
@@ -204,12 +197,12 @@ export function Home() {
                         <FolderGit2 size={13} />
                         Projects
                       </div>
-                
+
                       <span className="font-mono text-[10px] text-[var(--text-muted)]">
                         03
                       </span>
                     </div>
-                
+
                     <div className="mt-3 space-y-2">
                       <PreviewProject
                         number="01"
@@ -217,7 +210,7 @@ export function Home() {
                         description="Production-ready web application."
                         tech={["React", "FastAPI"]}
                       />
-                
+
                       <PreviewProject
                         number="02"
                         title="Pulse Monitor"
@@ -226,7 +219,7 @@ export function Home() {
                       />
                     </div>
                   </div>
-                
+
                   {/* Profile metadata */}
                   <div className="mt-5 flex items-center gap-4 border-t border-[var(--border)] pt-4 font-mono text-[9px] text-[var(--text-muted)]">
                     <span>3 projects</span>
@@ -273,10 +266,10 @@ function PreviewProject({
   description,
   tech,
 }: {
-  number: string
-  title: string
-  description: string
-  tech: string[]
+  number: string;
+  title: string;
+  description: string;
+  tech: string[];
 }) {
   return (
     <div className="group rounded-[var(--radius-md)] border border-[var(--border)] bg-[var(--background)] p-3.5 transition-all duration-200 hover:border-[var(--accent)]/30">
@@ -287,9 +280,7 @@ function PreviewProject({
 
         <div className="min-w-0 flex-1">
           <div className="flex items-center justify-between gap-3">
-            <p className="truncate text-sm font-medium">
-              {title}
-            </p>
+            <p className="truncate text-sm font-medium">{title}</p>
 
             <ArrowUpRight
               size={13}
@@ -314,5 +305,5 @@ function PreviewProject({
         ))}
       </div>
     </div>
-  )
+  );
 }
