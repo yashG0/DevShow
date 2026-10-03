@@ -31,6 +31,7 @@ export function Dashboard() {
       .slice(0, 2)
       .join("")
       .toUpperCase() || "?";
+
   const totalViews = projects.reduce(
     (total, project) => total + project.view_count,
     0,
@@ -39,6 +40,7 @@ export function Dashboard() {
   const publishedProjects = projects.filter(
     (project) => project.is_published,
   ).length;
+
   useEffect(() => {
     async function loadProjects() {
       try {
@@ -68,18 +70,25 @@ export function Dashboard() {
             </div>
 
             <div className="min-w-0">
-              <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-[var(--text-muted)]">
-                <Terminal size={13} />
-                Workspace
+              <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--text-muted)]">
+                <Terminal size={12} />
+                01 / Workspace
               </div>
 
               <h1 className="mt-2 text-3xl font-semibold tracking-[-0.045em] sm:text-4xl">
                 {user?.display_name}
               </h1>
 
-              <p className="mt-1 font-mono text-sm text-[var(--text-secondary)]">
-                @{user?.username}
-              </p>
+              <div className="mt-1 flex items-center gap-2">
+                <p className="font-mono text-sm text-[var(--text-secondary)]">
+                  @{user?.username}
+                </p>
+
+                <span className="inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.08em] text-[var(--success)]">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[var(--success)]" />
+                  Profile live
+                </span>
+              </div>
 
               <p className="mt-3 max-w-2xl whitespace-pre-line text-sm leading-6 text-[var(--text-secondary)]">
                 {user?.bio ||
@@ -120,23 +129,26 @@ export function Dashboard() {
             <ProfileLink label="Website" href={user.website_url} />
           )}
 
-          {!user?.github_url && !user?.linkedin_url && !user?.website_url && (
-            <button
-              type="button"
-              onClick={() => navigate("/profile")}
-              className="text-sm text-[var(--accent)] hover:text-[var(--accent-hover)]"
-            >
-              Add your developer links →
-            </button>
-          )}
+          {!user?.github_url &&
+            !user?.linkedin_url &&
+            !user?.website_url && (
+              <button
+                type="button"
+                onClick={() => navigate("/profile")}
+                className="text-sm text-[var(--accent)] hover:text-[var(--accent-hover)]"
+              >
+                Add your developer links →
+              </button>
+            )}
         </div>
       </section>
+
       {/* Analytics */}
       {!loading && !error && projects.length > 0 && (
         <section className="mt-10">
           <div className="mb-5">
-            <p className="font-mono text-xs uppercase tracking-[0.14em] text-[var(--text-muted)]">
-              Overview
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--text-muted)]">
+              01 / Overview
             </p>
 
             <h2 className="mt-1.5 text-2xl font-semibold tracking-[-0.035em]">
@@ -145,40 +157,53 @@ export function Dashboard() {
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5">
-              <div className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
-                <Eye size={15} />
-                Total views
+            <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5 transition-colors hover:border-[var(--border-strong)]">
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-muted)]">
+                  <Eye size={13} />
+                  Public views
+                </div>
+
+                <span className="font-mono text-[10px] text-[var(--text-muted)]">
+                  / traffic
+                </span>
               </div>
 
-              <p className="mt-3 text-3xl font-semibold tracking-[-0.04em]">
+              <p className="mt-4 text-3xl font-semibold tracking-[-0.04em]">
                 {totalViews}
               </p>
             </div>
 
-            <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5">
-              <div className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
-                <FolderGit2 size={15} />
-                Published projects
+            <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5 transition-colors hover:border-[var(--border-strong)]">
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-muted)]">
+                  <FolderGit2 size={13} />
+                  Published
+                </div>
+
+                <span className="font-mono text-[10px] text-[var(--text-muted)]">
+                  / projects
+                </span>
               </div>
 
-              <p className="mt-3 text-3xl font-semibold tracking-[-0.04em]">
+              <p className="mt-4 text-3xl font-semibold tracking-[-0.04em]">
                 {publishedProjects}
               </p>
             </div>
           </div>
         </section>
       )}
+
       {/* Projects */}
       <section className="mt-10">
         <div className="flex flex-col gap-4 border-b border-[var(--border)] pb-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="font-mono text-xs uppercase tracking-[0.14em] text-[var(--text-muted)]">
-              Your work
+            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--text-muted)]">
+              02 / Projects
             </p>
 
             <h2 className="mt-1.5 text-2xl font-semibold tracking-[-0.035em]">
-              Projects
+              Your work
             </h2>
 
             <p className="mt-1.5 text-sm text-[var(--text-muted)]">
@@ -214,7 +239,9 @@ export function Dashboard() {
                 <FolderGit2 size={18} />
               </div>
 
-              <h3 className="mt-5 text-base font-semibold">No projects yet</h3>
+              <h3 className="mt-5 text-base font-semibold">
+                No projects yet
+              </h3>
 
               <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-[var(--text-secondary)]">
                 Your projects will appear here once you create your first one.
@@ -225,10 +252,11 @@ export function Dashboard() {
 
         {!loading && !error && projects.length > 0 && (
           <div className="mt-6 divide-y divide-[var(--border)] rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)]">
-            {projects.map((project) => (
+            {projects.map((project, index) => (
               <ProjectRow
                 key={project.id}
                 project={project}
+                index={index + 1}
                 onOpen={() => navigate(`/projects/${project.id}`)}
               />
             ))}
@@ -241,18 +269,24 @@ export function Dashboard() {
 
 function ProjectRow({
   project,
+  index,
   onOpen,
 }: {
   project: Project;
+  index: number;
   onOpen: () => void;
 }) {
   return (
-    <article className="group p-5 transition-colors hover:bg-[var(--surface-hover)] sm:p-6">
+    <article className="group relative p-5 transition-colors hover:bg-[var(--surface-hover)] sm:p-6">
       <div className="flex flex-col gap-6">
         {/* Project header */}
         <div className="flex items-start justify-between gap-6">
           <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2.5">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="font-mono text-[10px] text-[var(--text-muted)]">
+                {String(index).padStart(2, "0")}
+              </span>
+
               <button
                 type="button"
                 onClick={onOpen}
@@ -294,7 +328,7 @@ function ProjectRow({
 
         {/* Technology stack */}
         {project.tech.length > 0 && (
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-1.5 pl-7">
             {project.tech.map((item) => (
               <span
                 key={item}
@@ -307,9 +341,9 @@ function ProjectRow({
         )}
 
         {/* Metadata + external links */}
-        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-[var(--border)]/70 pt-4">
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs">
-            <span className="inline-flex items-center gap-1.5">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-[var(--border)]/70 pt-4 pl-7">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            <span className="inline-flex items-center gap-1.5 font-mono text-[11px] text-[var(--text-muted)]">
               <Eye size={13} />
               {project.view_count} views
             </span>
@@ -320,7 +354,7 @@ function ProjectRow({
                 target="_blank"
                 rel="noreferrer"
                 onClick={(event) => event.stopPropagation()}
-                className="inline-flex items-center gap-1.5 text-[var(--text-secondary)] transition-colors hover:text-[var(--text)]"
+                className="inline-flex items-center gap-1.5 font-mono text-[11px] text-[var(--text-secondary)] transition-colors hover:text-[var(--text)]"
               >
                 GitHub
                 <ExternalLink size={12} />
@@ -333,20 +367,30 @@ function ProjectRow({
                 target="_blank"
                 rel="noreferrer"
                 onClick={(event) => event.stopPropagation()}
-                className="inline-flex items-center gap-1.5 text-[var(--text-secondary)] transition-colors hover:text-[var(--text)]"
+                className="inline-flex items-center gap-1.5 font-mono text-[11px] text-[var(--text-secondary)] transition-colors hover:text-[var(--text)]"
               >
                 Demo
                 <ExternalLink size={12} />
               </a>
             )}
           </div>
+
+          <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-[var(--text-muted)]">
+            project/{String(index).padStart(2, "0")}
+          </span>
         </div>
       </div>
     </article>
   );
 }
 
-function ProfileLink({ label, href }: { label: string; href: string }) {
+function ProfileLink({
+  label,
+  href,
+}: {
+  label: string;
+  href: string;
+}) {
   return (
     <a
       href={href}
