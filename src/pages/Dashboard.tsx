@@ -98,7 +98,7 @@ export function Dashboard() {
           </div>
 
           {/* Actions */}
-          <div className="mt-4 flex flex-col gap-2 sm:mt-0 sm:flex-row lg:shrink-0">
+          <div className="mt-4 grid grid-cols-2 gap-2 sm:mt-0 sm:flex sm:flex-row lg:shrink-0">
             <Button
               variant="secondary"
               size="sm"
