@@ -75,7 +75,7 @@ export function Dashboard() {
                 01 / Workspace
               </div>
 
-              <h1 className="mt-1.5 truncate text-2xl font-semibold tracking-[-0.045em] sm:mt-2 sm:text-4xl">
+              <h1 className="mt-1.5 text-[1.7rem] font-semibold leading-tight tracking-[-0.045em] sm:mt-2 sm:text-4xl">
                 {user?.display_name}
               </h1>
 
@@ -98,7 +98,7 @@ export function Dashboard() {
           </div>
 
           {/* Actions */}
-          <div className="grid grid-cols-2 gap-2 sm:flex lg:shrink-0">
+          <div className="mt-4 flex flex-col gap-2 sm:mt-0 sm:flex-row lg:shrink-0">
             <Button
               variant="secondary"
               size="sm"
@@ -107,14 +107,13 @@ export function Dashboard() {
             >
               Edit profile
             </Button>
-
+          
             <Button
               size="sm"
               onClick={() => navigate(`/dev/${user?.username}`)}
               className="w-full sm:w-auto"
             >
-              <span className="sm:inline">View profile</span>
-              <span className="sm:hidden">Public profile</span>
+              Public profile
               <ArrowUpRight size={14} />
             </Button>
           </div>
@@ -162,7 +161,7 @@ export function Dashboard() {
           </div>
 
           <div className="grid grid-cols-2 gap-2.5 sm:gap-4">
-            <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-3.5 transition-colors hover:border-[var(--border-strong)] sm:rounded-[var(--radius-lg)] sm:p-5">
+            <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-3 transition-colors hover:border-[var(--border-strong)] sm:rounded-[var(--radius-lg)] sm:p-5">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex min-w-0 items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[var(--text-muted)] sm:gap-2 sm:text-[10px] sm:tracking-[0.12em]">
                   <Eye size={12} />
@@ -174,7 +173,7 @@ export function Dashboard() {
                 </span>
               </div>
 
-              <p className="mt-2.5 text-2xl font-semibold tracking-[-0.04em] sm:mt-4 sm:text-3xl">
+              <p className="mt-2.5 text-[1.7rem] font-semibold tracking-[-0.04em] sm:mt-4 sm:text-3xl">
                 {totalViews}
               </p>
             </div>
@@ -191,7 +190,7 @@ export function Dashboard() {
                 </span>
               </div>
 
-              <p className="mt-2.5 text-2xl font-semibold tracking-[-0.04em] sm:mt-4 sm:text-3xl">
+              <p className="mt-2.5 text-[1.7rem] font-semibold tracking-[-0.04em] sm:mt-4 sm:text-3xl">
                 {publishedProjects}
               </p>
             </div>
@@ -286,7 +285,7 @@ function ProjectRow({
   onOpen: () => void;
 }) {
   return (
-    <article className="group p-4 transition-colors hover:bg-[var(--surface-hover)] sm:p-6">
+    <article className="group p-3.5 transition-colors hover:bg-[var(--surface-hover)] sm:p-6">
       {/* Header */}
       <div className="flex items-start gap-3">
         <span className="shrink-0 pt-1 font-mono text-[9px] text-[var(--text-muted)] sm:text-[10px]">
@@ -338,7 +337,7 @@ function ProjectRow({
 
           {/* Tech */}
           {project.tech.length > 0 && (
-            <div className="mt-4 flex flex-wrap gap-1.5 sm:mt-5">
+            <div className="mt-3 flex flex-wrap gap-1.5 sm:mt-5">
               {project.tech.map((item) => (
                 <span
                   key={item}
@@ -351,7 +350,7 @@ function ProjectRow({
           )}
 
           {/* Metadata */}
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--border)]/70 pt-3 sm:mt-5 sm:gap-4 sm:pt-4">
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--border)]/70 pt-3 sm:mt-5 sm:gap-4 sm:pt-4">
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 sm:gap-x-5">
               <span className="inline-flex items-center gap-1.5 font-mono text-[10px] text-[var(--text-muted)] sm:text-[11px]">
                 <Eye size={12} />
