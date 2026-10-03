@@ -60,48 +60,50 @@ export function Dashboard() {
   }, []);
 
   return (
-    <main className="mx-auto max-w-6xl px-6 py-8 lg:px-8 lg:py-10">
+    <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
       {/* Developer identity */}
       <section>
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex min-w-0 items-start gap-4">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[var(--accent)] text-lg font-semibold text-[var(--accent-foreground)]">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex min-w-0 items-start gap-3 sm:gap-4">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[var(--accent)] text-base font-semibold text-[var(--accent-foreground)] sm:h-14 sm:w-14 sm:rounded-2xl sm:text-lg">
               {initials}
             </div>
 
             <div className="min-w-0">
-              <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--text-muted)]">
-                <Terminal size={12} />
+              <div className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.15em] text-[var(--text-muted)] sm:text-[10px]">
+                <Terminal size={11} />
                 01 / Workspace
               </div>
 
-              <h1 className="mt-2 text-3xl font-semibold tracking-[-0.045em] sm:text-4xl">
+              <h1 className="mt-1.5 truncate text-2xl font-semibold tracking-[-0.045em] sm:mt-2 sm:text-4xl">
                 {user?.display_name}
               </h1>
 
-              <div className="mt-1 flex items-center gap-2">
-                <p className="font-mono text-sm text-[var(--text-secondary)]">
+              <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
+                <p className="font-mono text-xs text-[var(--text-secondary)] sm:text-sm">
                   @{user?.username}
                 </p>
 
-                <span className="inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.08em] text-[var(--success)]">
+                <span className="inline-flex items-center gap-1 font-mono text-[8px] uppercase tracking-[0.08em] text-[var(--success)] sm:text-[9px]">
                   <span className="h-1.5 w-1.5 rounded-full bg-[var(--success)]" />
                   Profile live
                 </span>
               </div>
 
-              <p className="mt-3 max-w-2xl whitespace-pre-line text-sm leading-6 text-[var(--text-secondary)]">
+              <p className="mt-2 max-w-2xl whitespace-pre-line text-sm leading-5 text-[var(--text-secondary)] sm:mt-3 sm:leading-6">
                 {user?.bio ||
                   "Build something worth showing. Your developer profile and projects will live here."}
               </p>
             </div>
           </div>
 
-          <div className="flex shrink-0 gap-2">
+          {/* Actions */}
+          <div className="grid grid-cols-2 gap-2 sm:flex lg:shrink-0">
             <Button
               variant="secondary"
               size="sm"
               onClick={() => navigate("/profile")}
+              className="w-full sm:w-auto"
             >
               Edit profile
             </Button>
@@ -109,14 +111,17 @@ export function Dashboard() {
             <Button
               size="sm"
               onClick={() => navigate(`/dev/${user?.username}`)}
+              className="w-full sm:w-auto"
             >
-              View public profile
-              <ArrowUpRight size={15} />
+              <span className="sm:inline">View profile</span>
+              <span className="sm:hidden">Public profile</span>
+              <ArrowUpRight size={14} />
             </Button>
           </div>
         </div>
 
-        <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 border-b border-[var(--border)] pb-7">
+        {/* Social links */}
+        <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-[var(--border)] pb-5 sm:mt-6 sm:gap-x-5 sm:pb-7">
           {user?.github_url && (
             <ProfileLink label="GitHub" href={user.github_url} />
           )}
@@ -145,48 +150,48 @@ export function Dashboard() {
 
       {/* Analytics */}
       {!loading && !error && projects.length > 0 && (
-        <section className="mt-10">
-          <div className="mb-5">
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--text-muted)]">
+        <section className="mt-7 sm:mt-10">
+          <div className="mb-4 sm:mb-5">
+            <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-[var(--text-muted)] sm:text-[10px]">
               01 / Overview
             </p>
 
-            <h2 className="mt-1.5 text-2xl font-semibold tracking-[-0.035em]">
+            <h2 className="mt-1 text-xl font-semibold tracking-[-0.035em] sm:mt-1.5 sm:text-2xl">
               Analytics
             </h2>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5 transition-colors hover:border-[var(--border-strong)]">
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-muted)]">
-                  <Eye size={13} />
-                  Public views
+          <div className="grid grid-cols-2 gap-2.5 sm:gap-4">
+            <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-3.5 transition-colors hover:border-[var(--border-strong)] sm:rounded-[var(--radius-lg)] sm:p-5">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex min-w-0 items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[var(--text-muted)] sm:gap-2 sm:text-[10px] sm:tracking-[0.12em]">
+                  <Eye size={12} />
+                  <span className="truncate">Public views</span>
                 </div>
 
-                <span className="font-mono text-[10px] text-[var(--text-muted)]">
+                <span className="hidden font-mono text-[10px] text-[var(--text-muted)] sm:block">
                   / traffic
                 </span>
               </div>
 
-              <p className="mt-4 text-3xl font-semibold tracking-[-0.04em]">
+              <p className="mt-2.5 text-2xl font-semibold tracking-[-0.04em] sm:mt-4 sm:text-3xl">
                 {totalViews}
               </p>
             </div>
 
-            <div className="rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-5 transition-colors hover:border-[var(--border-strong)]">
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-muted)]">
-                  <FolderGit2 size={13} />
-                  Published
+            <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-3.5 transition-colors hover:border-[var(--border-strong)] sm:rounded-[var(--radius-lg)] sm:p-5">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex min-w-0 items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[var(--text-muted)] sm:gap-2 sm:text-[10px] sm:tracking-[0.12em]">
+                  <FolderGit2 size={12} />
+                  <span>Published</span>
                 </div>
 
-                <span className="font-mono text-[10px] text-[var(--text-muted)]">
+                <span className="hidden font-mono text-[10px] text-[var(--text-muted)] sm:block">
                   / projects
                 </span>
               </div>
 
-              <p className="mt-4 text-3xl font-semibold tracking-[-0.04em]">
+              <p className="mt-2.5 text-2xl font-semibold tracking-[-0.04em] sm:mt-4 sm:text-3xl">
                 {publishedProjects}
               </p>
             </div>
@@ -195,30 +200,34 @@ export function Dashboard() {
       )}
 
       {/* Projects */}
-      <section className="mt-10">
-        <div className="flex flex-col gap-4 border-b border-[var(--border)] pb-5 sm:flex-row sm:items-end sm:justify-between">
+      <section className="mt-8 sm:mt-10">
+        <div className="flex flex-col gap-3 border-b border-[var(--border)] pb-4 sm:flex-row sm:items-end sm:justify-between sm:gap-4 sm:pb-5">
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--text-muted)]">
+            <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-[var(--text-muted)] sm:text-[10px]">
               02 / Projects
             </p>
 
-            <h2 className="mt-1.5 text-2xl font-semibold tracking-[-0.035em]">
+            <h2 className="mt-1 text-xl font-semibold tracking-[-0.035em] sm:mt-1.5 sm:text-2xl">
               Your work
             </h2>
 
-            <p className="mt-1.5 text-sm text-[var(--text-muted)]">
+            <p className="mt-1 text-xs text-[var(--text-muted)] sm:mt-1.5 sm:text-sm">
               Your projects, technologies and things you've built.
             </p>
           </div>
 
-          <Button size="sm" onClick={() => navigate("/projects/new")}>
-            <Plus size={16} />
+          <Button
+            size="sm"
+            onClick={() => navigate("/projects/new")}
+            className="w-full sm:w-auto"
+          >
+            <Plus size={15} />
             New project
           </Button>
         </div>
 
         {loading && (
-          <div className="flex min-h-64 items-center justify-center">
+          <div className="flex min-h-52 items-center justify-center">
             <Spinner size="lg" />
           </div>
         )}
@@ -226,14 +235,14 @@ export function Dashboard() {
         {!loading && error && (
           <div
             role="alert"
-            className="mt-6 rounded-[var(--radius-md)] border border-[var(--danger)]/20 bg-[var(--danger)]/10 px-4 py-3 text-sm text-[var(--danger)]"
+            className="mt-5 rounded-[var(--radius-md)] border border-[var(--danger)]/20 bg-[var(--danger)]/10 px-4 py-3 text-sm text-[var(--danger)]"
           >
             {error}
           </div>
         )}
 
         {!loading && !error && projects.length === 0 && (
-          <div className="mt-6 flex min-h-64 items-center justify-center rounded-[var(--radius-lg)] border border-dashed border-[var(--border)] bg-[var(--surface)] px-6 py-12 text-center">
+          <div className="mt-5 flex min-h-56 items-center justify-center rounded-[var(--radius-lg)] border border-dashed border-[var(--border)] bg-[var(--surface)] px-6 py-12 text-center">
             <div>
               <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--border)] text-[var(--text-muted)]">
                 <FolderGit2 size={18} />
@@ -251,7 +260,7 @@ export function Dashboard() {
         )}
 
         {!loading && !error && projects.length > 0 && (
-          <div className="mt-6 divide-y divide-[var(--border)] rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)]">
+          <div className="mt-5 divide-y divide-[var(--border)] overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] sm:mt-6">
             {projects.map((project, index) => (
               <ProjectRow
                 key={project.id}
@@ -277,107 +286,109 @@ function ProjectRow({
   onOpen: () => void;
 }) {
   return (
-    <article className="group relative p-5 transition-colors hover:bg-[var(--surface-hover)] sm:p-6">
-      <div className="flex flex-col gap-6">
-        {/* Project header */}
-        <div className="flex items-start justify-between gap-6">
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="font-mono text-[10px] text-[var(--text-muted)]">
-                {String(index).padStart(2, "0")}
-              </span>
+    <article className="group p-4 transition-colors hover:bg-[var(--surface-hover)] sm:p-6">
+      {/* Header */}
+      <div className="flex items-start gap-3">
+        <span className="shrink-0 pt-1 font-mono text-[9px] text-[var(--text-muted)] sm:text-[10px]">
+          {String(index).padStart(2, "0")}
+        </span>
 
-              <button
-                type="button"
-                onClick={onOpen}
-                className="text-left text-lg font-semibold tracking-[-0.025em] transition-colors hover:text-[var(--accent)]"
-              >
-                {project.title}
-              </button>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={onOpen}
+                  className="max-w-full text-left text-base font-semibold tracking-[-0.02em] transition-colors hover:text-[var(--accent)] sm:text-lg"
+                >
+                  {project.title}
+                </button>
 
-              <span
-                className={[
-                  "rounded-full border px-2 py-0.5 text-[11px] font-medium",
-                  project.is_published
-                    ? "border-[var(--success)]/25 bg-[var(--success)]/10 text-[var(--success)]"
-                    : "border-[var(--border)] text-[var(--text-muted)]",
-                ].join(" ")}
-              >
-                {project.is_published ? "Published" : "Draft"}
-              </span>
+                <span
+                  className={[
+                    "rounded-full border px-1.5 py-0.5 text-[9px] font-medium sm:px-2 sm:text-[11px]",
+                    project.is_published
+                      ? "border-[var(--success)]/25 bg-[var(--success)]/10 text-[var(--success)]"
+                      : "border-[var(--border)] text-[var(--text-muted)]",
+                  ].join(" ")}
+                >
+                  {project.is_published ? "Published" : "Draft"}
+                </span>
+              </div>
+
+              <p className="mt-1.5 text-xs leading-5 text-[var(--text-secondary)] sm:mt-2 sm:text-sm sm:leading-6">
+                {project.tagline}
+              </p>
             </div>
 
-            <p className="mt-2 max-w-3xl text-sm leading-6 text-[var(--text-secondary)]">
-              {project.tagline}
-            </p>
+            {/* Open */}
+            <button
+              type="button"
+              onClick={onOpen}
+              className="inline-flex shrink-0 items-center gap-1 text-xs font-medium text-[var(--text-secondary)] transition-colors hover:text-[var(--accent)] sm:text-sm"
+            >
+              Open
+              <ArrowUpRight
+                size={13}
+                className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              />
+            </button>
           </div>
 
-          {/* Primary action */}
-          <button
-            type="button"
-            onClick={onOpen}
-            className="inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:text-[var(--accent)]"
-          >
-            Open
-            <ArrowUpRight
-              size={14}
-              className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-            />
-          </button>
-        </div>
+          {/* Tech */}
+          {project.tech.length > 0 && (
+            <div className="mt-4 flex flex-wrap gap-1.5 sm:mt-5">
+              {project.tech.map((item) => (
+                <span
+                  key={item}
+                  className="rounded-md border border-[var(--border)] px-1.5 py-0.5 font-mono text-[9px] text-[var(--text-secondary)] transition-colors group-hover:border-[var(--border-strong)] sm:px-2 sm:py-1 sm:text-[11px]"
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
+          )}
 
-        {/* Technology stack */}
-        {project.tech.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 pl-7">
-            {project.tech.map((item) => (
-              <span
-                key={item}
-                className="rounded-md border border-[var(--border)] px-2 py-1 font-mono text-[11px] text-[var(--text-secondary)] transition-colors group-hover:border-[var(--border-strong)]"
-              >
-                {item}
+          {/* Metadata */}
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--border)]/70 pt-3 sm:mt-5 sm:gap-4 sm:pt-4">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 sm:gap-x-5">
+              <span className="inline-flex items-center gap-1.5 font-mono text-[10px] text-[var(--text-muted)] sm:text-[11px]">
+                <Eye size={12} />
+                {project.view_count} views
               </span>
-            ))}
-          </div>
-        )}
 
-        {/* Metadata + external links */}
-        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-[var(--border)]/70 pt-4 pl-7">
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-            <span className="inline-flex items-center gap-1.5 font-mono text-[11px] text-[var(--text-muted)]">
-              <Eye size={13} />
-              {project.view_count} views
+              {project.github_url && (
+                <a
+                  href={project.github_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={(event) => event.stopPropagation()}
+                  className="inline-flex items-center gap-1.5 font-mono text-[10px] text-[var(--text-secondary)] transition-colors hover:text-[var(--text)] sm:text-[11px]"
+                >
+                  GitHub
+                  <ExternalLink size={11} />
+                </a>
+              )}
+
+              {project.demo_url && (
+                <a
+                  href={project.demo_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={(event) => event.stopPropagation()}
+                  className="inline-flex items-center gap-1.5 font-mono text-[10px] text-[var(--text-secondary)] transition-colors hover:text-[var(--text)] sm:text-[11px]"
+                >
+                  Demo
+                  <ExternalLink size={11} />
+                </a>
+              )}
+            </div>
+
+            <span className="hidden font-mono text-[10px] uppercase tracking-[0.08em] text-[var(--text-muted)] sm:block">
+              project/{String(index).padStart(2, "0")}
             </span>
-
-            {project.github_url && (
-              <a
-                href={project.github_url}
-                target="_blank"
-                rel="noreferrer"
-                onClick={(event) => event.stopPropagation()}
-                className="inline-flex items-center gap-1.5 font-mono text-[11px] text-[var(--text-secondary)] transition-colors hover:text-[var(--text)]"
-              >
-                GitHub
-                <ExternalLink size={12} />
-              </a>
-            )}
-
-            {project.demo_url && (
-              <a
-                href={project.demo_url}
-                target="_blank"
-                rel="noreferrer"
-                onClick={(event) => event.stopPropagation()}
-                className="inline-flex items-center gap-1.5 font-mono text-[11px] text-[var(--text-secondary)] transition-colors hover:text-[var(--text)]"
-              >
-                Demo
-                <ExternalLink size={12} />
-              </a>
-            )}
           </div>
-
-          <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-[var(--text-muted)]">
-            project/{String(index).padStart(2, "0")}
-          </span>
         </div>
       </div>
     </article>
@@ -396,10 +407,10 @@ function ProfileLink({
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="inline-flex items-center gap-1.5 text-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--text)]"
+      className="inline-flex items-center gap-1.5 text-xs text-[var(--text-secondary)] transition-colors hover:text-[var(--text)] sm:text-sm"
     >
       {label}
-      <ExternalLink size={13} className="opacity-50" />
+      <ExternalLink size={12} className="opacity-50" />
     </a>
   );
 }
