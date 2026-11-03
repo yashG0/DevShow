@@ -142,31 +142,13 @@ The backend lives in a separate repository.
 
 ## 🏗️ Architecture
 
-DevShow uses a separated frontend/backend architecture.
+DevShow separates its React + TypeScript frontend from the FastAPI backend. The frontend calls the API over HTTPS using JSON; authenticated actions include a JWT bearer token. The backend validates requests, enforces ownership for private changes, and uses SQLAlchemy to persist profile and project data in PostgreSQL. Project images are validated and processed separately from their relational metadata.
 
-```text
-┌─────────────────────────────┐
-│          DevShow            │
-│          Frontend           │
-│                             │
-│  React + TypeScript + Vite  │
-└──────────────┬──────────────┘
-               │
-               │ HTTP / JSON
-               │ Bearer JWT
-               ▼
-┌─────────────────────────────┐
-│          DevShow            │
-│          Backend            │
-│                             │
-│    FastAPI + SQLAlchemy     │
-└──────────────┬──────────────┘
-               │
-               ▼
-        ┌─────────────┐
-        │ PostgreSQL  │
-        └─────────────┘
-```
+<p align="center">
+  <img src="docs/architecture.svg" alt="DevShow architecture: React frontend, FastAPI routes, JWT and ownership checks, PostgreSQL, and processed project media" width="100%" />
+</p>
+
+Public profile and project routes expose published content. Private profile and project operations require authentication and ownership checks. Uploaded image files are processed into WebP and served from the uploads path; their metadata is stored with the project in PostgreSQL.
 
 The frontend does not contain server-side rendering or template-based pages.
 
